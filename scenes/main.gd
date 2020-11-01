@@ -12,8 +12,6 @@ onready var add_assets_dialog := $AddAssetsDialog
 
 onready var asset_grid := find_node("AssetGrid")
 
-onready var image_texture_pool: Node = $ImageTexturePool
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -115,7 +113,6 @@ func _add_assets(asset_paths: Array):
 
 
 func _on_AssetGrid_request_asset_texture(asset_id: String):
-	print("requested texture for asset: %s" % asset_id)
 	galaxy.request_texture(asset_id)
 
 func _on_texture_ready(asset_id: String, texture: ImageTexture):
