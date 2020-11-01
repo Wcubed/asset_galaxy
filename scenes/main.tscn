@@ -127,6 +127,7 @@ __meta__ = {
 [connection signal="add_assets_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_add_assets_dialog"]
 [connection signal="load_galaxy_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_load_galaxy_dialog"]
 [connection signal="new_galaxy_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_new_galaxy_dialog" binds= [ "res://" ]]
+[connection signal="request_asset_texture" from="MainPanel/VBoxContainer/AssetGrid" to="." method="_on_AssetGrid_request_asset_texture"]
 [connection signal="dir_selected" from="NewGalaxyDialog" to="." method="_on_NewGalaxyDialog_dir_selected"]
 [connection signal="file_selected" from="LoadGalaxyDialog" to="." method="_load_galaxy"]
 [connection signal="files_selected" from="AddAssetsDialog" to="." method="_add_assets"]

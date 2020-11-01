@@ -5,6 +5,8 @@
 [node name="AssetCell" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -12,10 +14,14 @@ __meta__ = {
 
 [node name="TextureRect" type="TextureRect" parent="."]
 margin_right = 1024.0
+margin_bottom = 582.0
+rect_min_size = Vector2( 100, 100 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 expand = true
 stretch_mode = 6
 
 [node name="Title" type="Label" parent="."]
-margin_top = 4.0
+margin_top = 586.0
 margin_right = 1024.0
-margin_bottom = 18.0
+margin_bottom = 600.0

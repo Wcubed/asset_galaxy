@@ -12,6 +12,8 @@ onready var add_assets_dialog := $AddAssetsDialog
 
 onready var asset_grid := find_node("AssetGrid")
 
+onready var image_texture_pool: Node = $ImageTexturePool
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -83,6 +85,7 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 	galaxy.save_dir_path = dir_path
 	
 	add_child(galaxy)
+	galaxy.image_texture_pool.connect("texture_ready", self, "_on_texture_ready")
 	
 	if from_disk:
 		# Load an existing galaxy from the disk.
@@ -91,7 +94,7 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 		galaxy.save()
 	
 	# TODO: make this nicer. Dont just blatantly get all the children.
-	asset_grid.display_assets(galaxy.assets.get_children())
+	asset_grid.display_assets(galaxy.get_assets())
 
 
 func _load_galaxy(file_path: String):
@@ -107,5 +110,13 @@ func _add_assets(asset_paths: Array):
 	galaxy.add_assets_from_disk(asset_paths)
 	
 	# TODO: make this nicer. Dont just blatantly get all the children.
-	asset_grid.display_assets(galaxy.assets.get_children())
+	asset_grid.display_assets(galaxy.get_assets())
 
+
+
+func _on_AssetGrid_request_asset_texture(asset_id: String):
+	print("requested texture for asset: %s" % asset_id)
+	galaxy.request_texture(asset_id)
+
+func _on_texture_ready(asset_id: String, texture: ImageTexture):
+	asset_grid._on_texture_ready(asset_id, texture)
