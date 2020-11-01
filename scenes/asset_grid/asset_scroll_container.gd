@@ -3,7 +3,7 @@ extends ScrollContainer
 
 var desired_cell_width: float = 100
 
-onready var asset_grid: GridContainer = $AssetGridContainer
+onready var asset_grid: GridContainer = $MarginContainer/AssetGridContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

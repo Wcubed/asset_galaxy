@@ -2,21 +2,14 @@
 
 [ext_resource path="res://scenes/asset_grid/asset_grid.gd" type="Script" id=1]
 [ext_resource path="res://scenes/asset_grid/asset_scroll_container.gd" type="Script" id=2]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.2, 0.227451, 0.309804, 1 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color( 0.0980392, 0.113725, 0.152941, 1 )
+[ext_resource path="res://scenes/resources/panel_variant_01.stylebox" type="StyleBox" id=3]
 
 [node name="AssetGrid" type="PanelContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 1 )
+custom_styles/panel = ExtResource( 3 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -31,5 +24,19 @@ size_flags_horizontal = 9
 follow_focus = true
 script = ExtResource( 2 )
 
-[node name="AssetGridContainer" type="GridContainer" parent="AssetScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="AssetScrollContainer"]
+margin_right = 1022.0
+margin_bottom = 598.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 2
+custom_constants/margin_top = 2
+custom_constants/margin_left = 2
+custom_constants/margin_bottom = 2
+
+[node name="AssetGridContainer" type="GridContainer" parent="AssetScrollContainer/MarginContainer"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 1020.0
+margin_bottom = 596.0
 [connection signal="resized" from="AssetScrollContainer" to="AssetScrollContainer" method="_on_resized"]

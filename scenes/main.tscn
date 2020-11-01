@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scenes/resources/main_theme.theme" type="Theme" id=1]
 [ext_resource path="res://scenes/file_menu.gd" type="Script" id=2]
 [ext_resource path="res://scenes/main.gd" type="Script" id=3]
 [ext_resource path="res://scenes/asset_grid/asset_grid.tscn" type="PackedScene" id=4]
 [ext_resource path="res://data_structures/user_settings.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/asset_detail_view/asset_detail_view.tscn" type="PackedScene" id=6]
 
 [node name="Main" type="Control"]
 anchor_right = 1.0
@@ -18,6 +19,9 @@ __meta__ = {
 [node name="MainPanel" type="PanelContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainPanel"]
 margin_left = 6.0
@@ -35,12 +39,26 @@ margin_bottom = 22.0
 text = "File"
 script = ExtResource( 2 )
 
-[node name="AssetGrid" parent="MainPanel/VBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="HSplitContainer" type="HSplitContainer" parent="MainPanel/VBoxContainer"]
 margin_top = 26.0
 margin_right = 1012.0
 margin_bottom = 592.0
+size_flags_vertical = 3
+
+[node name="AssetGrid" parent="MainPanel/VBoxContainer/HSplitContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 670.0
+margin_bottom = 566.0
+
+[node name="AssetDetailView" parent="MainPanel/VBoxContainer/HSplitContainer" instance=ExtResource( 6 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 678.0
+margin_right = 1012.0
+margin_bottom = 566.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
 
 [node name="NewGalaxyDialog" type="FileDialog" parent="."]
 anchor_left = 0.5
@@ -130,7 +148,7 @@ __meta__ = {
 [connection signal="add_assets_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_add_assets_dialog"]
 [connection signal="load_galaxy_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_load_galaxy_dialog"]
 [connection signal="new_galaxy_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_new_galaxy_dialog" binds= [ "res://" ]]
-[connection signal="request_asset_texture" from="MainPanel/VBoxContainer/AssetGrid" to="." method="_on_AssetGrid_request_asset_texture"]
+[connection signal="request_asset_texture" from="MainPanel/VBoxContainer/HSplitContainer/AssetGrid" to="." method="_on_AssetGrid_request_asset_texture"]
 [connection signal="dir_selected" from="NewGalaxyDialog" to="." method="_on_NewGalaxyDialog_dir_selected"]
 [connection signal="file_selected" from="LoadGalaxyDialog" to="." method="_load_galaxy_file"]
 [connection signal="files_selected" from="AddAssetsDialog" to="." method="_add_assets"]
