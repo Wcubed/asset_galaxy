@@ -56,6 +56,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="FolderNotEmptyNotification" type="AcceptDialog" parent="NewGalaxyDialog"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -512.086
+margin_top = -316.084
+margin_right = -78.0863
+margin_bottom = -248.084
+popup_exclusive = true
+window_title = ""
+dialog_text = "The selected folder is not empty. Please select an empty folder."
+
 [node name="LoadGalaxyDialog" type="FileDialog" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
@@ -80,19 +93,32 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FolderNotEmptyNotification" type="AcceptDialog" parent="."]
+[node name="AddAssetsDialog" type="FileDialog" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -512.0
-margin_top = -300.0
-margin_right = -78.0
-margin_bottom = -232.0
+margin_left = -302.914
+margin_top = -178.416
+margin_right = 303.086
+margin_bottom = 210.584
+rect_min_size = Vector2( 600, 300 )
 popup_exclusive = true
-window_title = ""
-dialog_text = "The selected folder is not empty. Please select an empty folder."
+window_title = "Select asset files."
+resizable = true
+mode_overrides_title = false
+mode = 1
+access = 2
+filters = PoolStringArray( "*.png", "*.jpg" )
+show_hidden_files = true
+current_dir = "/media/Data/WybeData/Projects/Godot/Programs/AssetGalaxy"
+current_path = "/media/Data/WybeData/Projects/Godot/Programs/AssetGalaxy/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="add_assets_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_add_assets_dialog"]
 [connection signal="load_galaxy_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_load_galaxy_dialog"]
 [connection signal="new_galaxy_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_new_galaxy_dialog" binds= [ "res://" ]]
 [connection signal="dir_selected" from="NewGalaxyDialog" to="." method="_on_NewGalaxyDialog_dir_selected"]
 [connection signal="file_selected" from="LoadGalaxyDialog" to="." method="_load_galaxy"]
+[connection signal="files_selected" from="AddAssetsDialog" to="." method="_add_assets"]
