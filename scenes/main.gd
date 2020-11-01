@@ -10,6 +10,8 @@ onready var folder_not_empty_notification := $NewGalaxyDialog/FolderNotEmptyNoti
 onready var load_galaxy_dialog := $LoadGalaxyDialog
 onready var add_assets_dialog := $AddAssetsDialog
 
+onready var asset_grid := find_node("AssetGrid")
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -87,6 +89,9 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 		galaxy.load_from_disk()
 	else:
 		galaxy.save()
+	
+	# TODO: make this nicer. Dont just blatantly get all the children.
+	asset_grid.display_assets(galaxy.assets.get_children())
 
 
 func _load_galaxy(file_path: String):
@@ -100,4 +105,7 @@ func _add_assets(asset_paths: Array):
 	#      or do we always load a default one, in a location in the users home directory?
 	# TODO: check if the given paths actually exist?
 	galaxy.add_assets_from_disk(asset_paths)
+	
+	# TODO: make this nicer. Dont just blatantly get all the children.
+	asset_grid.display_assets(galaxy.assets.get_children())
 
