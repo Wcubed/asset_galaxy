@@ -5,6 +5,8 @@ var galaxy_scene: PackedScene = preload("res://data_structures/galaxy.tscn")
 # Our current project.
 var galaxy: Node = null
 
+onready var user_settings := $UserSettings
+
 onready var new_galaxy_dialog := $NewGalaxyDialog
 onready var folder_not_empty_notification := $NewGalaxyDialog/FolderNotEmptyNotification
 onready var load_galaxy_dialog := $LoadGalaxyDialog
@@ -15,7 +17,10 @@ onready var asset_grid := find_node("AssetGrid")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	# Can we load a previously loaded galaxy?
+	# So that the user can immediately continue where they left off?
+	if user_settings.last_opened_galaxy != "":
+		_load_galaxy_dir(user_settings.last_opened_galaxy)
 
 
 # `path` optional argument. If nothing is given the last selected folder is used
@@ -91,14 +96,17 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 	else:
 		galaxy.save()
 	
-	# TODO: make this nicer. Dont just blatantly get all the children.
+	# Remember the galaxy so we can quickly open it next time.
+	user_settings.set_last_opened_galaxy(dir_path)
+	
 	asset_grid.display_assets(galaxy.get_assets())
 
-
-func _load_galaxy(file_path: String):
-	var dir_path := file_path.get_base_dir()
-	
+func _load_galaxy_dir(dir_path: String):
 	_new_galaxy(dir_path, true)
+
+func _load_galaxy_file(file_path: String):
+	var dir_path := file_path.get_base_dir()
+	_load_galaxy_dir(dir_path)
 
 
 func _add_assets(asset_paths: Array):
