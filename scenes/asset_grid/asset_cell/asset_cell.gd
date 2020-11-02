@@ -3,7 +3,7 @@ extends PanelContainer
 # The name of the AssetCell will be set to the same number as the asset it
 # displays. Before the cell is added to the tree.
 
-signal clicked(child_index)
+signal clicked(child_index, shift_pressed, ctrl_pressed)
 
 var normal_style: StyleBox = preload("res://scenes/asset_grid/asset_cell/resources/cell_unselected.stylebox")
 var selected_style: StyleBox = preload("res://scenes/asset_grid/asset_cell/resources/cell_selected.stylebox")
@@ -36,7 +36,14 @@ func set_selected(value: bool):
 		set("custom_styles/panel", normal_style)
 
 
+func toggle_selected():
+	set_selected(not selected)
+
+
 func _gui_input(event):
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
+		var shift_pressed := Input.is_key_pressed(KEY_SHIFT)
+		var ctrl_pressed := Input.is_key_pressed(KEY_CONTROL)
+		
 		# Left mouse button was pressed on us.
-		emit_signal("clicked", get_index())
+		emit_signal("clicked", get_index(), shift_pressed, ctrl_pressed)
