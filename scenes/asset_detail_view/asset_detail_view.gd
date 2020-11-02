@@ -12,6 +12,8 @@ onready var tag_entry := find_node("TagEntry")
 
 onready var tags_all_have_list := find_node("TagsAllHaveList")
 onready var tags_some_have_list := find_node("TagsSomeHaveList")
+onready var tags_all_have_label := find_node("AllSelectedTagsLabel")
+onready var tags_some_have_label := find_node("SomeSelectedTagsLabel")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -69,6 +71,23 @@ func _on_AssetGrid_selection_changed(asset_ids: Array):
 	
 	tags_all_have_list.display_tags(tags_all_have)
 	tags_some_have_list.display_tags(tags_some_have)
+	
+	# Hide the appropriate lists.
+	if len(tags_all_have) == 0:
+		tags_all_have_label.visible = false
+		tags_all_have_list.visible = false
+	else:
+		# No need for the label if there is actually only 1 selected asset.
+		# Because of course all the selected assets have that tag.
+		tags_all_have_label.visible = amount != 1
+		tags_all_have_list.visible = true
+	
+	if len(tags_some_have) == 0:
+		tags_some_have_label.visible = false
+		tags_some_have_list.visible = false
+	else:
+		tags_some_have_label.visible = true
+		tags_some_have_list.visible = true
 
 
 func _on_Main_new_galaxy(galaxy_node):
