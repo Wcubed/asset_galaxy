@@ -10,7 +10,8 @@ onready var detail_label := find_node("DetailLabel")
 onready var texture_rect := find_node("TextureRect")
 onready var tag_entry := find_node("TagEntry")
 
-onready var tag_list := find_node("TagList")
+onready var tags_all_have_list := find_node("TagsAllHaveList")
+onready var tags_some_have_list := find_node("TagsSomeHaveList")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -45,23 +46,37 @@ func _on_AssetGrid_selection_changed(asset_ids: Array):
 		# Show details of multiple items.
 		detail_label.text = "%s selected" % amount
 	
-	# Show the tags of the asset(s).
-	# TODO: have a list of "all have these tags" and a list for "some have these tags"
-	var tag_ids = []
-	for asset in assets:
-		for tag_id in asset.get_tag_ids():
-			# Did we already see this tag?
-			if not tag_id in tag_ids:
-				tag_ids.append(tag_id)
+	# ---- Show the tags of the selected asset(s) ----
 	
-	tag_list.display_tags(tag_ids)
+	# Count how many times a tag appars in the selection.
+	# So we can be sure which tags are common to all, and which are not.
+	# Dictionary of tag_id -> Count of selected assets that have this tag.
+	var tag_counts = {}
+	for asset in assets:
+		var asset_tags = asset.get_tag_ids()
+		for tag in asset_tags:
+			tag_counts[tag] = tag_counts.get(tag, 0) + 1
+	
+	var tags_all_have = []
+	var tags_some_have = []
+	
+	for tag in tag_counts:
+		if tag_counts[tag] == amount:
+			# Every selected asset has this tag.
+			tags_all_have.append(tag)
+		else:
+			tags_some_have.append(tag)
+	
+	tags_all_have_list.display_tags(tags_all_have)
+	tags_some_have_list.display_tags(tags_some_have)
 
 
 func _on_Main_new_galaxy(galaxy_node):
 	_galaxy = galaxy_node
 	_galaxy.connect("texture_ready", self, "_on_texture_ready")
 	
-	tag_list._on_galaxy_changed(galaxy_node)
+	tags_all_have_list._on_galaxy_changed(galaxy_node)
+	tags_some_have_list._on_galaxy_changed(galaxy_node)
 
 
 func _on_texture_ready(texture_name, texture):
