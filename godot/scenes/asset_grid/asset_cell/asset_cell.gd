@@ -11,8 +11,12 @@ var selected_style: StyleBox = preload("res://scenes/asset_grid/asset_cell/resou
 
 var selected: bool = false setget set_selected
 
-onready var title_label: Label = $MarginContainer/VBoxContainer/Title
+var _asset_node: Node = null
+
+onready var title_label: Label = $MarginContainer/VBoxContainer/HBoxContainer/Title
 onready var texture_rect: TextureRect = $MarginContainer/VBoxContainer/TextureRect
+onready var tag_count_panel: PanelContainer = $MarginContainer/VBoxContainer/HBoxContainer/TagCountPanel
+onready var tag_count_label: Label = $MarginContainer/VBoxContainer/HBoxContainer/TagCountPanel/TagCountLabel
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -20,7 +24,26 @@ func _ready():
 
 
 func display_asset_info(asset_node: Node):
-	title_label.text = asset_node.title
+	if _asset_node != null:
+		# Disconnect the previous update signal.
+		_asset_node.disconnect("data_changed", self, "_on_asset_data_changed")
+	
+	_asset_node = asset_node
+	
+	# Subscribe to updates.
+	asset_node.connect("data_changed", self, "_on_asset_data_changed")
+	_on_asset_data_changed()
+
+
+func _on_asset_data_changed():
+	title_label.text = _asset_node.title
+	
+	var tag_count := len(_asset_node.get_tag_ids())
+	if tag_count > 0:
+		tag_count_panel.visible = true
+		tag_count_label.text = str(tag_count)
+	else:
+		tag_count_panel.visible = false
 
 
 func display_texture(texture: ImageTexture):

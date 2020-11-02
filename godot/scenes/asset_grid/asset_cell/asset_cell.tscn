@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scenes/asset_grid/asset_cell/asset_cell.gd" type="Script" id=1]
+[ext_resource path="res://scenes/resources/tag_panel.stylebox" type="StyleBox" id=2]
 
 [node name="AssetCell" type="PanelContainer"]
 margin_right = 1024.0
@@ -44,10 +45,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 margin_top = 104.0
 margin_right = 1006.0
 margin_bottom = 118.0
+
+[node name="TagCountPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_bottom = 14.0
+custom_styles/panel = ExtResource( 2 )
+
+[node name="TagCountLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/TagCountPanel"]
+margin_bottom = 14.0
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 4.0
+margin_right = 1006.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
 clip_text = true
 __meta__ = {
 "_edit_use_anchors_": false

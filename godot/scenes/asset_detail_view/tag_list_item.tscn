@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://scenes/asset_detail_view/resources/tag_list_item.stylebox" type="StyleBox" id=1]
+[ext_resource path="res://scenes/resources/tag_panel.stylebox" type="StyleBox" id=1]
 [ext_resource path="res://scenes/asset_detail_view/tag_list_item.gd" type="Script" id=2]
 [ext_resource path="res://icons/icon_x.png" type="Texture" id=3]
 
