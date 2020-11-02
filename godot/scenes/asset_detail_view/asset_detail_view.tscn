@@ -83,4 +83,6 @@ size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="remove_tag_requested" from="MarginContainer/VBoxContainer/TagsAllHaveList" to="." method="_on_remove_tag_requested"]
+[connection signal="remove_tag_requested" from="MarginContainer/VBoxContainer/TagsSomeHaveList" to="." method="_on_remove_tag_requested"]
 [connection signal="text_entered" from="MarginContainer/VBoxContainer/TagEntry" to="." method="_on_TagEntry_text_entered"]

@@ -116,3 +116,10 @@ func _on_TagEntry_text_entered(new_text):
 	
 	# Re-display the assets. To reflect the update.
 	_display_assets(_current_selection)
+
+
+func _on_remove_tag_requested(tag_id: int):
+	_galaxy.remove_tag_from_assets_by_tag_id(_current_selection, tag_id)
+	
+	# Re-display the assets. To reflect the update.
+	_display_assets(_current_selection)
