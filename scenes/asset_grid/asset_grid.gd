@@ -25,6 +25,8 @@ func display_assets(asset_nodes: Array):
 		
 		cell.name = node.name
 		_asset_grid.add_child(cell)
+		# For handling selecting and deselecting cells.
+		cell.connect("clicked", self, "_on_cell_clicked")
 		
 		cell.display_asset_info(node)
 		
@@ -39,3 +41,14 @@ func _on_texture_ready(asset_id: String, texture: ImageTexture):
 		return
 	
 	cell.display_texture(texture)
+
+
+# Handles selecting and deselecting cells.
+# `child_index`: The value of the child's "get_index()" method.
+func _on_cell_clicked(child_index: int):
+	print(child_index)
+	# TODO: allow shift and ctrl selecting.
+	for child in _asset_grid.get_children():
+		child.set_selected(false)
+	
+	_asset_grid.get_child(child_index).set_selected(true)

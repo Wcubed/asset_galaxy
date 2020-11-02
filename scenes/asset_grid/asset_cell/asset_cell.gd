@@ -1,14 +1,22 @@
-extends VBoxContainer
+extends PanelContainer
 
 # The name of the AssetCell will be set to the same number as the asset it
 # displays. Before the cell is added to the tree.
 
-onready var title_label: Label = $Title
-onready var texture_rect: TextureRect = $TextureRect
+signal clicked(child_index)
+
+var normal_style: StyleBox = preload("res://scenes/asset_grid/asset_cell/resources/cell_unselected.stylebox")
+var selected_style: StyleBox = preload("res://scenes/asset_grid/asset_cell/resources/cell_selected.stylebox")
+
+
+var selected: bool = false setget set_selected
+
+onready var title_label: Label = $MarginContainer/VBoxContainer/Title
+onready var texture_rect: TextureRect = $MarginContainer/VBoxContainer/TextureRect
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	set_selected(false)
 
 
 func display_asset_info(asset_node: Node):
@@ -17,3 +25,18 @@ func display_asset_info(asset_node: Node):
 
 func display_texture(texture: ImageTexture):
 	texture_rect.texture = texture
+
+
+func set_selected(value: bool):
+	selected = value
+	
+	if selected:
+		set("custom_styles/panel", selected_style)
+	else:
+		set("custom_styles/panel", normal_style)
+
+
+func _gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
+		# Left mouse button was pressed on us.
+		emit_signal("clicked", get_index())

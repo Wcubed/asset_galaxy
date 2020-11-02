@@ -19,9 +19,22 @@ margin_top = 1.0
 margin_right = 1023.0
 margin_bottom = 599.0
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+[node name="AssetTexture" type="TextureRect" parent="VBoxContainer"]
+margin_right = 1022.0
+margin_bottom = 64.0
+texture = ExtResource( 3 )
+stretch_mode = 6
+
+[node name="AssetName" type="Label" parent="VBoxContainer"]
+margin_top = 68.0
+margin_right = 1022.0
+margin_bottom = 82.0
+
+[node name="Spacer" type="Control" parent="VBoxContainer"]
+margin_top = 86.0
 margin_right = 1022.0
 margin_bottom = 598.0
 size_flags_vertical = 3
-texture = ExtResource( 3 )
-stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}

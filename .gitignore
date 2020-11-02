@@ -1,6 +1,9 @@
 # Directory to preform tests in.
 test_directory/
 
+# Executable export directory.
+export/
+
 
 # --------
 
