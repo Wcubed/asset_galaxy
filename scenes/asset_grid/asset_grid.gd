@@ -3,6 +3,10 @@ extends PanelContainer
 # Emitted when we want to display a certain asset.
 signal request_asset_texture(asset_id)
 
+# Emitted when the user selects or deselects assets.
+# Passes an array of selected id's.
+signal selection_changed(asset_ids)
+
 
 var _asset_cell_scene: PackedScene = preload("res://scenes/asset_grid/asset_cell/asset_cell.tscn")
 
@@ -78,3 +82,12 @@ func _on_cell_clicked(child_index: int, shift_pressed: bool, ctrl_pressed: bool)
 	
 	# Remember this for the next time the user selects using shift.
 	_last_selected_cell_index = child_index
+	
+	# Let the rest of the program know the current selection.
+	var selection := []
+	
+	for child in _asset_grid.get_children():
+		if child.selected:
+			selection.append(child.name)
+	
+	emit_signal("selection_changed", selection)

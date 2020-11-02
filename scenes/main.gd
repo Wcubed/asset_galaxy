@@ -1,5 +1,7 @@
 extends Control
 
+signal new_galaxy(galaxy_node)
+
 var galaxy_scene: PackedScene = preload("res://data_structures/galaxy.tscn")
 
 # Our current project.
@@ -88,7 +90,7 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 	galaxy.save_dir_path = dir_path
 	
 	add_child(galaxy)
-	galaxy.image_texture_pool.connect("texture_ready", self, "_on_texture_ready")
+	galaxy.connect("texture_ready", self, "_on_texture_ready")
 	
 	if from_disk:
 		# Load an existing galaxy from the disk.
@@ -100,6 +102,8 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 	user_settings.set_last_opened_galaxy(dir_path)
 	
 	asset_grid.display_assets(galaxy.get_assets())
+	
+	emit_signal("new_galaxy", galaxy)
 
 func _load_galaxy_dir(dir_path: String):
 	_new_galaxy(dir_path, true)
