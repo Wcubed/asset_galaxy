@@ -15,6 +15,8 @@ onready var tags_some_have_list := find_node("TagsSomeHaveList")
 onready var tags_all_have_label := find_node("AllSelectedTagsLabel")
 onready var tags_some_have_label := find_node("SomeSelectedTagsLabel")
 
+onready var confirm_delete_dialog := $ConfirmDeleteDialog
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -123,3 +125,14 @@ func _on_remove_tag_requested(tag_id: int):
 	
 	# Re-display the assets. To reflect the update.
 	_display_assets(_current_selection)
+
+
+func _on_DeleteButton_pressed():
+	if len(_current_selection) > 0:
+		confirm_delete_dialog.set_as_minsize()
+		confirm_delete_dialog.popup_centered()
+
+
+func _on_ConfirmDeleteDialog_confirmed():
+	# We have been authorized to delete the selected assets!
+	_galaxy.delete_assets(_current_selection)
