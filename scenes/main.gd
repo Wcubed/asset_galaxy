@@ -19,10 +19,21 @@ onready var asset_grid := find_node("AssetGrid")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# We want to save before quiting.
+	get_tree().set_auto_accept_quit(false)
+	
 	# Can we load a previously loaded galaxy?
 	# So that the user can immediately continue where they left off?
 	if user_settings.last_opened_galaxy != "":
 		_load_galaxy_dir(user_settings.last_opened_galaxy)
+
+
+# This is where the application's `quit` request is handled.
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		# Save before quit.
+		galaxy.save()
+		get_tree().quit()
 
 
 # `path` optional argument. If nothing is given the last selected folder is used

@@ -8,7 +8,7 @@ var current_selection := []
 
 onready var detail_label := find_node("DetailLabel")
 onready var texture_rect := find_node("TextureRect")
-
+onready var tag_entry := find_node("TagEntry")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -50,3 +50,9 @@ func _on_texture_ready(texture_name, texture):
 	if len(current_selection) == 1:
 		if texture_name == current_selection[0]:
 			texture_rect.texture = texture
+
+
+func _on_TagEntry_text_entered(new_text):
+	# Add the given tag to all the selected assets.
+	galaxy.add_tag_to_assets(current_selection, new_text)
+	tag_entry.text = ""
