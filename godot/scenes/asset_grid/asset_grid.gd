@@ -34,6 +34,9 @@ func display_assets(asset_nodes: Array):
 		# Make sure existing cells are not using node names we need.
 		child.name = "__"
 		
+		# Clear any selections.
+		child.set_selected(false)
+		
 		if i >= len(asset_nodes):
 			# These are no longer needed.
 			child.queue_free()
@@ -64,6 +67,7 @@ func display_assets(asset_nodes: Array):
 	
 	# Can't have selected anything if the cells were just created.
 	_last_selected_cell_index = -1
+	emit_signal("selection_changed", [])
 
 
 # This is called with the requested asset texture, when it is ready.
