@@ -1,4 +1,4 @@
-extends PanelContainer
+extends VBoxContainer
 
 # Emitted when we want to display a certain asset.
 signal request_asset_texture(asset_id)
@@ -6,6 +6,9 @@ signal request_asset_texture(asset_id)
 # Emitted when the user selects or deselects assets.
 # Passes an array of selected id's.
 signal selection_changed(asset_ids)
+
+
+signal asset_search_requested(title_search)
 
 
 var _asset_cell_scene: PackedScene = preload("res://scenes/asset_grid/asset_cell/asset_cell.tscn")
@@ -23,22 +26,41 @@ func _ready():
 
 # Clears the current assets in the grid, and displays the given ones.
 func display_assets(asset_nodes: Array):
-	for node in _asset_grid.get_children():
-		node.queue_free()
+	# TODO: allow for sorting?
 	
+	# We will re-use any existing grid cells.
+	var i := 0
+	for child in _asset_grid.get_children():
+		# Make sure existing cells are not using node names we need.
+		child.name = "__"
+		
+		if i >= len(asset_nodes):
+			# These are no longer needed.
+			child.queue_free()
+		
+		i += 1
+	
+	var existing_cell_count := _asset_grid.get_child_count()
+	i = 0
 	for node in asset_nodes:
-		# Display the info that we currently have.
-		var cell := _asset_cell_scene.instance()
+		var cell: Node = null
+		if i < existing_cell_count:
+			# We can use an exisiting cell.
+			cell = _asset_grid.get_child(i)
+		else:
+			# We have to use a new cell.
+			cell = _asset_cell_scene.instance()
+			_asset_grid.add_child(cell)
 		
 		cell.name = node.name
-		_asset_grid.add_child(cell)
 		# For handling selecting and deselecting cells.
 		cell.connect("clicked", self, "_on_cell_clicked")
-		
 		cell.display_asset_info(node)
 		
 		# Request the texture. (this could take a while).
 		emit_signal("request_asset_texture", node.name)
+		
+		i += 1
 	
 	# Can't have selected anything if the cells were just created.
 	_last_selected_cell_index = -1
@@ -91,3 +113,8 @@ func _on_cell_clicked(child_index: int, shift_pressed: bool, ctrl_pressed: bool)
 			selection.append(child.name)
 	
 	emit_signal("selection_changed", selection)
+
+
+func _on_SeachEdit_text_changed(new_text):
+	# Search the assets based on title.
+	emit_signal("asset_search_requested", new_text)

@@ -102,6 +102,7 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 	
 	add_child(galaxy)
 	galaxy.connect("texture_ready", self, "_on_texture_ready")
+	galaxy.connect("asset_search_completed", self, "_on_asset_search_completed")
 	
 	if from_disk:
 		# Load an existing galaxy from the disk.
@@ -140,3 +141,10 @@ func _on_AssetGrid_request_asset_texture(asset_id: String):
 
 func _on_texture_ready(asset_id: String, texture: ImageTexture):
 	asset_grid._on_texture_ready(asset_id, texture)
+
+
+func _on_AssetGrid_asset_search_requested(title_search: String):
+	galaxy.run_asset_search(title_search)
+
+func _on_asset_search_completed(asset_nodes: Array):
+	asset_grid.display_assets(asset_nodes)

@@ -19,7 +19,9 @@ func _ready():
 
 
 func _on_resized():
-	_fit_columns_to_desired_width()
+	# Check if this event did not fire before we are actually ready.
+	if asset_grid != null:
+		_fit_columns_to_desired_width()
 
 
 func _fit_columns_to_desired_width():
