@@ -4,7 +4,7 @@ extends PanelContainer
 var _galaxy: Node = null
 
 # List of id's that are currently selected.
-var current_selection := []
+var _current_selection := []
 
 onready var detail_label := find_node("DetailLabel")
 onready var texture_rect := find_node("TextureRect")
@@ -20,8 +20,8 @@ func _ready():
 	pass # Replace with function body.
 
 
-func _on_AssetGrid_selection_changed(asset_ids: Array):
-	current_selection = asset_ids
+func _display_assets(asset_ids: Array):
+	_current_selection = asset_ids
 	var amount = len(asset_ids)
 	
 	# Retrieve the actual asset nodes indexed by the given id's.
@@ -90,6 +90,10 @@ func _on_AssetGrid_selection_changed(asset_ids: Array):
 		tags_some_have_list.visible = true
 
 
+func _on_AssetGrid_selection_changed(asset_ids: Array):
+	_display_assets(asset_ids)
+
+
 func _on_Main_new_galaxy(galaxy_node):
 	_galaxy = galaxy_node
 	_galaxy.connect("texture_ready", self, "_on_texture_ready")
@@ -100,12 +104,15 @@ func _on_Main_new_galaxy(galaxy_node):
 
 func _on_texture_ready(texture_name, texture):
 	# Display the texture if there is a single selection.
-	if len(current_selection) == 1:
-		if texture_name == current_selection[0]:
+	if len(_current_selection) == 1:
+		if texture_name == _current_selection[0]:
 			texture_rect.texture = texture
 
 
 func _on_TagEntry_text_entered(new_text):
 	# Add the given tag to all the selected assets.
-	_galaxy.add_tag_to_assets(current_selection, new_text)
+	_galaxy.add_tag_to_assets(_current_selection, new_text)
 	tag_entry.text = ""
+	
+	# Re-display the assets. To reflect the update.
+	_display_assets(_current_selection)
