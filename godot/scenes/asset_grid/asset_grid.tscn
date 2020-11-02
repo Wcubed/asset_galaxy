@@ -50,6 +50,7 @@ margin_right = 1012.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 script = ExtResource( 4 )
+horizontal_margin = 10.0
 
 [node name="PanelContainer2" type="PanelContainer" parent="."]
 margin_top = 40.0

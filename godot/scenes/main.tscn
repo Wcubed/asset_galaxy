@@ -48,17 +48,17 @@ size_flags_vertical = 3
 [node name="AssetGrid" parent="MainPanel/VBoxContainer/HSplitContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 430.0
+margin_right = 670.0
 margin_bottom = 566.0
 
 [node name="AssetDetailView" parent="MainPanel/VBoxContainer/HSplitContainer" instance=ExtResource( 6 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 438.0
+margin_left = 678.0
 margin_right = 1012.0
 margin_bottom = 566.0
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.33
+size_flags_stretch_ratio = 0.5
 
 [node name="NewGalaxyDialog" type="FileDialog" parent="."]
 anchor_left = 0.5

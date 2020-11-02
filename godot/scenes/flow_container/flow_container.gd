@@ -7,6 +7,8 @@ extends Container
 # TODO: half-respect vertical SIZE_EXPAND flags by expanding the child to match
 #       the tallest child in that row?
 
+export var horizontal_margin: float = 5
+export var vertical_margin: float = 5
 
 # Used to make our parent re-evaluate our size when we have to create more or
 # less rows to fit in all the children.
@@ -21,6 +23,7 @@ func _get_minimum_size() -> Vector2:
 	print("re-evaluated")
 	# Our minimum width is the width of the widest child.
 	var max_requested_width := 0
+	
 	for child in get_children():
 		# Check if the child is actually a `Control`.
 		if not child.has_method("get_combined_minimum_size"):
@@ -56,8 +59,11 @@ func _notification(what):
 # locations.
 # Returns the resulting height.
 func _calculate_layout(apply: bool) -> float:
+	# Where to place the next child.
 	var next_location: Vector2 = Vector2(0, 0)
 	var row_height: int = 0
+	# Used to calculate when to apply the horizontal margin.
+	var children_in_current_row := 0
 	
 	for child in get_children():
 		# Check if the child is actually a `Control`.
@@ -65,16 +71,25 @@ func _calculate_layout(apply: bool) -> float:
 			continue
 		
 		var requested_size: Vector2 = child.get_combined_minimum_size()
+		
+		if children_in_current_row > 0:
+			# This is not the first child in this row,
+			# which means we need to apply the margin.
+			next_location.x += horizontal_margin
+		
 		# Would this control fit on this row?
 		if requested_size.x + next_location.x > rect_size.x:
 			# No it would not. Go to the next row.
-			next_location = Vector2(0, next_location.y + row_height)
+			next_location = Vector2(0, next_location.y + row_height + vertical_margin)
 			row_height = 0
+			children_in_current_row = 0
 		
 		fit_child_in_rect(child, Rect2(next_location, requested_size))
 		
 		if requested_size.y > row_height:
 			row_height = requested_size.y
+		
 		next_location.x += requested_size.x
+		children_in_current_row += 1
 	
 	return next_location.y + row_height
