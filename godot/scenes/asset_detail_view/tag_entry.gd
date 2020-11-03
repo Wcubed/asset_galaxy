@@ -59,6 +59,15 @@ func _on_text_changed(new_text: String):
 		if tag_text.find(new_text) != -1:
 			# Possible auto-complete tag.
 			_auto_complete_popup.add_radio_check_item(tag_text, tag_id)
+			
+			if tag_text == new_text:
+				# This tag is exact.
+				# So we do not show the "create new tag" option.
+				# (which is always the 0th option).
+				_auto_complete_popup.remove_item(0)
+				
+				var index: int = _auto_complete_popup.get_item_index(tag_id)
+				_check_autocomplete_item(index)
 	
 	var requested_size: Vector2 = _auto_complete_popup.get_combined_minimum_size()
 	# Popup just beneath this text entry, as wide as this entry.
