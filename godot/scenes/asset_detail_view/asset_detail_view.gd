@@ -128,7 +128,6 @@ func _on_texture_ready(texture_name, texture):
 func _on_TagEntry_text_entered(new_text):
 	# Add the given tag to all the selected assets.
 	_galaxy.add_tag_to_assets(_current_selection, new_text)
-	tag_entry.text = ""
 	
 	# Re-display the assets. To reflect the update.
 	_display_assets(_current_selection)
@@ -156,3 +155,4 @@ func _on_tag_list_changed():
 	# We need to re-display the assets.
 	# because tags might have been removed.
 	_display_assets(_current_selection)
+

@@ -70,6 +70,8 @@ margin_bottom = 62.0
 margin_top = 66.0
 margin_right = 1012.0
 margin_bottom = 90.0
+context_menu_enabled = false
+clear_button_enabled = true
 placeholder_text = "Add tag"
 script = ExtResource( 4 )
 
@@ -108,5 +110,6 @@ dialog_text = "Really delete the selected assets? This cannot be undone!"
 [connection signal="focus_exited" from="MarginContainer/VBoxContainer/TagEntry" to="MarginContainer/VBoxContainer/TagEntry" method="_on_TagEntry_focus_exited"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/TagEntry" to="MarginContainer/VBoxContainer/TagEntry" method="_on_text_changed"]
 [connection signal="text_entered" from="MarginContainer/VBoxContainer/TagEntry" to="." method="_on_TagEntry_text_entered"]
+[connection signal="gui_input" from="MarginContainer/VBoxContainer/TagEntry/TagAutocompletePopup" to="MarginContainer/VBoxContainer/TagEntry" method="_on_TagAutocompletePopup_gui_input"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
 [connection signal="confirmed" from="ConfirmDeleteDialog" to="." method="_on_ConfirmDeleteDialog_confirmed"]
