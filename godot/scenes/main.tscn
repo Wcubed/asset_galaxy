@@ -145,6 +145,10 @@ __meta__ = {
 }
 
 [node name="UserSettings" parent="." instance=ExtResource( 5 )]
+
+[node name="AutoSaveTimer" type="Timer" parent="."]
+wait_time = 300.0
+autostart = true
 [connection signal="new_galaxy" from="." to="MainPanel/VBoxContainer/HSplitContainer/AssetGrid" method="_on_new_galaxy"]
 [connection signal="new_galaxy" from="." to="MainPanel/VBoxContainer/HSplitContainer/AssetDetailView" method="_on_Main_new_galaxy"]
 [connection signal="add_assets_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_add_assets_dialog"]
@@ -158,3 +162,4 @@ __meta__ = {
 [connection signal="dir_selected" from="AddAssetsDialog" to="." method="_on_AddAssetsDialog_dir_selected"]
 [connection signal="file_selected" from="AddAssetsDialog" to="." method="_on_AddAssetsDialog_file_selected"]
 [connection signal="files_selected" from="AddAssetsDialog" to="." method="_on_AddAssetsDialog_files_selected"]
+[connection signal="timeout" from="AutoSaveTimer" to="." method="_on_AutoSaveTimer_timeout"]

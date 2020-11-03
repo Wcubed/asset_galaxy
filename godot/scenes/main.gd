@@ -195,3 +195,10 @@ func _scan_dir_for_assets_recursively(dir_path: String) -> Array:
 	dir.list_dir_end()
 	
 	return asset_paths
+
+
+func _on_AutoSaveTimer_timeout():
+	# Autosave!
+	# TODO: only save if the galaxy has actually changed?
+	if galaxy != null:
+		galaxy.save()
