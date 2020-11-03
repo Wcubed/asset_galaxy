@@ -111,5 +111,7 @@ dialog_text = "Really delete the selected assets? This cannot be undone!"
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/TagEntry" to="MarginContainer/VBoxContainer/TagEntry" method="_on_text_changed"]
 [connection signal="text_entered" from="MarginContainer/VBoxContainer/TagEntry" to="." method="_on_TagEntry_text_entered"]
 [connection signal="gui_input" from="MarginContainer/VBoxContainer/TagEntry/TagAutocompletePopup" to="MarginContainer/VBoxContainer/TagEntry" method="_on_TagAutocompletePopup_gui_input"]
+[connection signal="id_pressed" from="MarginContainer/VBoxContainer/TagEntry/TagAutocompletePopup" to="MarginContainer/VBoxContainer/TagEntry" method="_on_TagAutocompletePopup_id_pressed"]
+[connection signal="index_pressed" from="MarginContainer/VBoxContainer/TagEntry/TagAutocompletePopup" to="MarginContainer/VBoxContainer/TagEntry" method="_on_TagAutocompletePopup_index_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
 [connection signal="confirmed" from="ConfirmDeleteDialog" to="." method="_on_ConfirmDeleteDialog_confirmed"]

@@ -120,3 +120,8 @@ func _on_TagAutocompletePopup_gui_input(event):
 		if item_idx != -1:
 			# User hovered over an option.
 			_check_autocomplete_item(item_idx)
+
+
+func _on_TagAutocompletePopup_index_pressed(index: int):
+	_check_autocomplete_item(index)
+	_accept_input()
