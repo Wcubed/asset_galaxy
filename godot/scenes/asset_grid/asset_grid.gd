@@ -56,7 +56,7 @@ func display_assets(asset_nodes: Array):
 			cell = _asset_cell_scene.instance()
 			_asset_grid.add_child(cell)
 			# For handling selecting and deselecting cells.
-			cell.connect("clicked", self, "_on_cell_clicked")
+			cell.connect("focused", self, "_on_cell_focused")
 		
 		cell.name = node.name
 		cell.display_asset_info(node)
@@ -66,9 +66,47 @@ func display_assets(asset_nodes: Array):
 		
 		i += 1
 	
+	_connect_grid_focus_chain()
+	
 	# Can't have selected anything if the cells were just created.
 	_last_selected_cell_index = -1
 	emit_signal("selection_changed", [])
+
+
+func _connect_grid_focus_chain():
+	# Protect against calling this function before we are correctly added
+	# to the node tree.
+	if _asset_grid == null:
+		return
+	
+	# Correctly connect the "focus" chain, so that we can move through the
+	# grid via arrow keys.
+	var columns := _asset_grid.columns
+	var rows := floor(_asset_grid.get_child_count() / columns)
+	
+	for j in range(0, _asset_grid.get_child_count()):
+		var source_node: Control = _asset_grid.get_child(j)
+		if j != 0:
+			# Not the first node, so we have a previous node.
+			source_node.focus_neighbour_left = _asset_grid.get_child(j - 1).get_path()
+		if j < _asset_grid.get_child_count() -1:
+			# Not the last node, so we have a next node.
+			source_node.focus_neighbour_right = _asset_grid.get_child(j + 1).get_path()
+		
+		var row := floor(j / columns)
+		if row != 0:
+			# Not in the top row, so there is a node above this in the grid.
+			source_node.focus_neighbour_top = _asset_grid.get_child(j - columns).get_path()
+		if row < rows - 1:
+			# One node down.
+			# Bottom row might not be entirely full, so double-check.
+			var target_node := _asset_grid.get_child(j + columns)
+			if target_node != null:
+				source_node.focus_neighbour_bottom = target_node.get_path()
+			else:
+				# Just go to the last node in the list.
+				source_node.focus_neighbour_bottom = _asset_grid.get_child(
+					_asset_grid.get_child_count() - 1).get_path()
 
 
 # This is called with the requested asset texture, when it is ready.
@@ -82,7 +120,7 @@ func _on_texture_ready(asset_id: String, texture: ImageTexture):
 
 # Handles selecting and deselecting cells.
 # `child_index`: The value of the child's "get_index()" method.
-func _on_cell_clicked(child_index: int, shift_pressed: bool, ctrl_pressed: bool):
+func _on_cell_focused(child_index: int, shift_pressed: bool, ctrl_pressed: bool):
 	if shift_pressed and _last_selected_cell_index != -1:
 		# Shift: select everything between the last selected cell, and the
 		# current one.
@@ -121,3 +159,9 @@ func _on_cell_clicked(child_index: int, shift_pressed: bool, ctrl_pressed: bool)
 
 func _on_new_galaxy(galaxy_node: Node):
 	_asset_search._on_new_galaxy(galaxy_node)
+
+
+func _on_AssetScrollContainer_column_amount_changed():
+	# This means the focus chain of the cells is no longer correct for
+	# up and down.
+	_connect_grid_focus_chain()

@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/asset_detail_view/asset_detail_view.gd" type="Script" id=1]
 [ext_resource path="res://scenes/resources/panel_variant_01.stylebox" type="StyleBox" id=2]
 [ext_resource path="res://scenes/asset_detail_view/tag_list.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/asset_detail_view/tag_entry.gd" type="Script" id=4]
 
 [node name="AssetDetailView" type="PanelContainer"]
 anchor_right = 1.0
@@ -70,6 +71,12 @@ margin_top = 66.0
 margin_right = 1012.0
 margin_bottom = 90.0
 placeholder_text = "Add tag"
+script = ExtResource( 4 )
+
+[node name="TagAutocompletePopup" type="PopupMenu" parent="MarginContainer/VBoxContainer/TagEntry"]
+margin_right = 20.0
+margin_bottom = 20.0
+focus_mode = 0
 
 [node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer"]
 margin_top = 94.0
@@ -98,6 +105,8 @@ window_title = "Are you sure?"
 dialog_text = "Really delete the selected assets? This cannot be undone!"
 [connection signal="remove_tag_requested" from="MarginContainer/VBoxContainer/TagsAllHaveList" to="." method="_on_remove_tag_requested"]
 [connection signal="remove_tag_requested" from="MarginContainer/VBoxContainer/TagsSomeHaveList" to="." method="_on_remove_tag_requested"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/TagEntry" to="MarginContainer/VBoxContainer/TagEntry" method="_on_TagEntry_focus_exited"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/TagEntry" to="MarginContainer/VBoxContainer/TagEntry" method="_on_text_changed"]
 [connection signal="text_entered" from="MarginContainer/VBoxContainer/TagEntry" to="." method="_on_TagEntry_text_entered"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
 [connection signal="confirmed" from="ConfirmDeleteDialog" to="." method="_on_ConfirmDeleteDialog_confirmed"]

@@ -55,4 +55,5 @@ margin_right = 1020.0
 margin_bottom = 556.0
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
+[connection signal="column_amount_changed" from="PanelContainer2/AssetScrollContainer" to="." method="_on_AssetScrollContainer_column_amount_changed"]
 [connection signal="resized" from="PanelContainer2/AssetScrollContainer" to="PanelContainer2/AssetScrollContainer" method="_on_resized"]

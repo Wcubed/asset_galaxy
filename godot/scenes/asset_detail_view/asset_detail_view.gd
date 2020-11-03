@@ -115,6 +115,7 @@ func _on_Main_new_galaxy(galaxy_node):
 	
 	tags_all_have_list._on_galaxy_changed(galaxy_node)
 	tags_some_have_list._on_galaxy_changed(galaxy_node)
+	tag_entry._on_galaxy_changed(galaxy_node)
 
 
 func _on_texture_ready(texture_name, texture):

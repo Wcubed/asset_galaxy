@@ -6,6 +6,7 @@
 [node name="AssetCell" type="PanelContainer"]
 margin_right = 1024.0
 margin_bottom = 14.0
+focus_mode = 2
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -66,3 +67,4 @@ clip_text = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="focus_entered" from="." to="." method="_on_AssetCell_focus_entered"]

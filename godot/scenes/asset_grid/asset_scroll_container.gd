@@ -2,6 +2,8 @@ extends ScrollContainer
 
 # Makes sure more or less columns are displayed when this container is resized.
 
+signal column_amount_changed()
+
 # TODO: Make sure the cells are actually this wide, instead of 
 #       having to adjust this value manually to the cell width.
 var desired_cell_width: float = 105
@@ -27,4 +29,7 @@ func _on_resized():
 func _fit_columns_to_desired_width():
 	# Try to keep the individual cells to be the desired width.
 	var columns_fit := floor(rect_size.x / desired_cell_width)
-	asset_grid.columns = columns_fit
+	
+	if columns_fit != asset_grid.columns:
+		asset_grid.columns = columns_fit
+		emit_signal("column_amount_changed")
