@@ -145,6 +145,7 @@ __meta__ = {
 }
 
 [node name="UserSettings" parent="." instance=ExtResource( 5 )]
+[connection signal="new_galaxy" from="." to="MainPanel/VBoxContainer/HSplitContainer/AssetGrid" method="_on_new_galaxy"]
 [connection signal="new_galaxy" from="." to="MainPanel/VBoxContainer/HSplitContainer/AssetDetailView" method="_on_Main_new_galaxy"]
 [connection signal="add_assets_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_add_assets_dialog"]
 [connection signal="load_galaxy_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_load_galaxy_dialog"]

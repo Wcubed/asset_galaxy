@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/resources/panel_variant_01.stylebox" type="StyleBox" id=1]
+[ext_resource path="res://scenes/flow_container/flow_container.gd" type="Script" id=2]
+[ext_resource path="res://scenes/asset_grid/asset_search.gd" type="Script" id=3]
+
+[node name="AssetSearch" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = ExtResource( 1 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 1023.0
+margin_bottom = 599.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="SearchContainer" type="HBoxContainer" parent="MarginContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 1017.0
+margin_bottom = 593.0
+
+[node name="SearchEdit" type="LineEdit" parent="MarginContainer/SearchContainer"]
+margin_right = 200.0
+margin_bottom = 588.0
+rect_min_size = Vector2( 200, 0 )
+placeholder_text = "Search titles"
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="TagFlowContainer" type="Container" parent="MarginContainer/SearchContainer"]
+margin_left = 204.0
+margin_right = 1012.0
+margin_bottom = 588.0
+size_flags_horizontal = 3
+script = ExtResource( 2 )
+horizontal_margin = 10.0
+[connection signal="text_changed" from="MarginContainer/SearchContainer/SearchEdit" to="." method="_on_SeachEdit_text_changed"]

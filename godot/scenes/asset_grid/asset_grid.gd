@@ -18,6 +18,7 @@ var _asset_cell_scene: PackedScene = preload("res://scenes/asset_grid/asset_cell
 var _last_selected_cell_index: int = -1
 
 onready var _asset_grid: GridContainer = find_node("AssetGridContainer")
+onready var _asset_search: PanelContainer = find_node("AssetSearch")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -54,10 +55,10 @@ func display_assets(asset_nodes: Array):
 			# We have to use a new cell.
 			cell = _asset_cell_scene.instance()
 			_asset_grid.add_child(cell)
+			# For handling selecting and deselecting cells.
+			cell.connect("clicked", self, "_on_cell_clicked")
 		
 		cell.name = node.name
-		# For handling selecting and deselecting cells.
-		cell.connect("clicked", self, "_on_cell_clicked")
 		cell.display_asset_info(node)
 		
 		# Request the texture. (this could take a while).
@@ -118,7 +119,5 @@ func _on_cell_clicked(child_index: int, shift_pressed: bool, ctrl_pressed: bool)
 	
 	emit_signal("selection_changed", selection)
 
-
-func _on_SeachEdit_text_changed(new_text):
-	# Search the assets based on title.
-	emit_signal("asset_search_requested", new_text)
+func _on_new_galaxy(galaxy_node: Node):
+	_asset_search._on_new_galaxy(galaxy_node)
