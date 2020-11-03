@@ -117,9 +117,13 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 	
 	emit_signal("new_galaxy", galaxy)
 
+
+# Load a galaxy project from a directory.
 func _load_galaxy_dir(dir_path: String):
 	_new_galaxy(dir_path, true)
 
+# Load a galaxy project given a "galaxy.json" file.
+# actually calls `_load_galaxy_dir` internally.
 func _load_galaxy_file(file_path: String):
 	var dir_path := file_path.get_base_dir()
 	_load_galaxy_dir(dir_path)
@@ -135,7 +139,6 @@ func _add_assets(asset_paths: Array):
 	asset_grid.display_assets(galaxy.get_assets())
 
 
-
 func _on_AssetGrid_request_asset_texture(asset_id: String):
 	galaxy.request_texture(asset_id)
 
@@ -148,3 +151,47 @@ func _on_AssetGrid_asset_search_requested(title_search: String):
 
 func _on_asset_search_completed(asset_nodes: Array):
 	asset_grid.display_assets(asset_nodes)
+
+
+func _on_AddAssetsDialog_file_selected(path: String):
+	_add_assets([path])
+
+
+func _on_AddAssetsDialog_files_selected(paths: Array):
+	_add_assets(paths)
+
+
+func _on_AddAssetsDialog_dir_selected(dir_path: String):
+	_add_assets(_scan_dir_for_assets_recursively(dir_path))
+
+# Recursively scan the given directory for assets.
+# Returns an array of file paths.
+func _scan_dir_for_assets_recursively(dir_path: String) -> Array:
+	# TODO: have this filter stored somewhere central.
+	var asset_extensions := ["png", "jpg"]
+	
+	# TODO: Check for errors.
+	var dir := Directory.new()
+	dir.open(dir_path)
+	
+	var asset_paths := []
+	
+	dir.list_dir_begin(true)
+	var file_name := dir.get_next()
+	
+	while file_name != "":
+		var full_path := dir_path + "/" + file_name
+		
+		if dir.current_is_dir():
+			# Another directory. Scan it recursively.
+			asset_paths += _scan_dir_for_assets_recursively(full_path)
+		else:
+			if file_name.get_extension() in asset_extensions:
+				# This is an asset.
+				asset_paths.append(full_path)
+		
+		file_name = dir.get_next()
+	
+	dir.list_dir_end()
+	
+	return asset_paths

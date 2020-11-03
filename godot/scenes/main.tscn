@@ -134,7 +134,7 @@ popup_exclusive = true
 window_title = "Select asset files."
 resizable = true
 mode_overrides_title = false
-mode = 1
+mode = 3
 access = 2
 filters = PoolStringArray( "*.png", "*.jpg" )
 show_hidden_files = true
@@ -155,4 +155,6 @@ __meta__ = {
 [connection signal="selection_changed" from="MainPanel/VBoxContainer/HSplitContainer/AssetGrid" to="MainPanel/VBoxContainer/HSplitContainer/AssetDetailView" method="_on_AssetGrid_selection_changed"]
 [connection signal="dir_selected" from="NewGalaxyDialog" to="." method="_on_NewGalaxyDialog_dir_selected"]
 [connection signal="file_selected" from="LoadGalaxyDialog" to="." method="_load_galaxy_file"]
-[connection signal="files_selected" from="AddAssetsDialog" to="." method="_add_assets"]
+[connection signal="dir_selected" from="AddAssetsDialog" to="." method="_on_AddAssetsDialog_dir_selected"]
+[connection signal="file_selected" from="AddAssetsDialog" to="." method="_on_AddAssetsDialog_file_selected"]
+[connection signal="files_selected" from="AddAssetsDialog" to="." method="_on_AddAssetsDialog_files_selected"]
