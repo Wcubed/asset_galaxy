@@ -9,6 +9,7 @@ var _current_selection := []
 onready var detail_label := find_node("DetailLabel")
 onready var texture_rect := find_node("TextureRect")
 onready var tag_entry := find_node("TagEntry")
+onready var delete_button := find_node("DeleteButton")
 
 onready var tags_all_have_list := find_node("TagsAllHaveList")
 onready var tags_some_have_list := find_node("TagsSomeHaveList")
@@ -19,7 +20,8 @@ onready var confirm_delete_dialog := $ConfirmDeleteDialog
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	# Show 0 assets.
+	_display_assets([])
 
 
 func _display_assets(asset_ids: Array):
@@ -40,15 +42,25 @@ func _display_assets(asset_ids: Array):
 	if amount == 0:
 		# Selection was cleared.
 		detail_label.text = ""
+		tag_entry.visible = false
+		delete_button.visible = false
 	elif amount == 1:
 		# Show detail view of single item.
 		if assets[0] != null:
 			# Make sure we get the texture at some point.
 			_galaxy.request_texture(assets[0].name)
 			detail_label.text = assets[0].title
+		
+		tag_entry.visible = true
+		delete_button.visible = true
+		delete_button.text = "Delete Asset"
 	else:
 		# Show details of multiple items.
 		detail_label.text = "%s selected" % amount
+		
+		tag_entry.visible = true
+		delete_button.visible = true
+		delete_button.text = "Delete %s Assets" % amount
 	
 	# ---- Show the tags of the selected asset(s) ----
 	
