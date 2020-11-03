@@ -20,7 +20,6 @@ func _ready():
 
 
 func _get_minimum_size() -> Vector2:
-	print("re-evaluated")
 	# Our minimum width is the width of the widest child.
 	var max_requested_width := 0
 	

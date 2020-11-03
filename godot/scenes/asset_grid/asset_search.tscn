@@ -44,4 +44,12 @@ margin_bottom = 588.0
 size_flags_horizontal = 3
 script = ExtResource( 2 )
 horizontal_margin = 10.0
+
+[node name="TagDeleteConfirmDialog" type="ConfirmationDialog" parent="."]
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 201.0
+margin_bottom = 71.0
+window_title = "Are you sure?"
 [connection signal="text_changed" from="MarginContainer/SearchContainer/SearchEdit" to="." method="_on_SeachEdit_text_changed"]
+[connection signal="confirmed" from="TagDeleteConfirmDialog" to="." method="_on_TagDeleteConfirmDialog_confirmed"]

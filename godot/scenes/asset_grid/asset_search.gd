@@ -5,9 +5,13 @@ var _tag_search_item_scene: PackedScene = preload("res://scenes/asset_grid/tag_s
 
 var _galaxy: Node = null
 
+# This holds which tag we were requested to delete, while the user
+# sees the confirmation dialog.
+var _requested_tag_id_to_delete := 0
 
 onready var _search_edit: LineEdit = $MarginContainer/SearchContainer/SearchEdit
 onready var _tag_flow_container: Container = $MarginContainer/SearchContainer/TagFlowContainer
+onready var _tag_delete_confirm_dialog: Popup = $TagDeleteConfirmDialog
 
 
 # Called when the node enters the scene tree for the first time.
@@ -64,7 +68,20 @@ func _on_tag_list_changed():
 		new_tag_item.set_tag(tag_id, tag_text)
 		
 		new_tag_item.connect("toggled", self, "_on_tag_item_toggled")
+		new_tag_item.connect("tag_delete_requested", self, "_on_tag_delete_requested")
 
 
 func _on_tag_item_toggled(state: bool):
 	_run_new_search()
+
+
+func _on_tag_delete_requested(tag_id: int, tag_text: String):
+	_requested_tag_id_to_delete = tag_id
+	_tag_delete_confirm_dialog.dialog_text = "Are you sure you want to delete the tag \"%s\" and remove it from all assets?" % tag_text
+	
+	_tag_delete_confirm_dialog.popup_centered()
+
+
+func _on_TagDeleteConfirmDialog_confirmed():
+	# Delete authorised.
+	_galaxy.delete_tag(_requested_tag_id_to_delete)

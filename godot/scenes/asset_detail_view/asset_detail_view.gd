@@ -99,6 +99,7 @@ func _on_AssetGrid_selection_changed(asset_ids: Array):
 func _on_Main_new_galaxy(galaxy_node):
 	_galaxy = galaxy_node
 	_galaxy.connect("texture_ready", self, "_on_texture_ready")
+	_galaxy.connect("tag_list_changed", self, "_on_tag_list_changed")
 	
 	tags_all_have_list._on_galaxy_changed(galaxy_node)
 	tags_some_have_list._on_galaxy_changed(galaxy_node)
@@ -136,3 +137,9 @@ func _on_DeleteButton_pressed():
 func _on_ConfirmDeleteDialog_confirmed():
 	# We have been authorized to delete the selected assets!
 	_galaxy.delete_assets(_current_selection)
+
+
+func _on_tag_list_changed():
+	# We need to re-display the assets.
+	# because tags might have been removed.
+	_display_assets(_current_selection)
