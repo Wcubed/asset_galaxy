@@ -186,7 +186,8 @@ func _scan_dir_for_assets_recursively(dir_path: String) -> Array:
 			# Another directory. Scan it recursively.
 			asset_paths += _scan_dir_for_assets_recursively(full_path)
 		else:
-			if file_name.get_extension() in asset_extensions:
+			# Extension capitalization should not matter.
+			if file_name.get_extension().to_lower() in asset_extensions:
 				# This is an asset.
 				asset_paths.append(full_path)
 		
