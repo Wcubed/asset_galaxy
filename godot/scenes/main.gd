@@ -2,7 +2,7 @@ extends Control
 
 signal new_galaxy(galaxy_node)
 
-var galaxy_scene: PackedScene = preload("res://data_structures/galaxy.tscn")
+var galaxy_scene: PackedScene = preload("res://asset_data/galaxy.tscn")
 
 # Our current project.
 var galaxy: Node = null
