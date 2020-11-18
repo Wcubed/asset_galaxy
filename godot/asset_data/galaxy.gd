@@ -273,9 +273,14 @@ func save():
 
 
 func load_from_disk():
-	# TODO: check if the file exists.
 	var file := File.new()
-	file.open(save_dir_path + "/" + SAVE_FILE_NAME, File.READ)
+	var file_name := save_dir_path + "/" + SAVE_FILE_NAME
+	
+	if not file.file_exists(file_name):
+		# TODO: show some kind of message.
+		return
+	
+	file.open(file_name, File.READ)
 	
 	# First line has the general galaxy settings.
 	var load_dict: Dictionary = parse_json(file.get_line())
