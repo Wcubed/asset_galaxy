@@ -2,7 +2,8 @@
 
 [ext_resource path="res://scenes/resources/panel_variant_01.stylebox" type="StyleBox" id=1]
 [ext_resource path="res://scenes/flow_container/flow_container.gd" type="Script" id=2]
-[ext_resource path="res://scenes/asset_grid/asset_search.gd" type="Script" id=3]
+[ext_resource path="res://scenes/central_view/asset_search.gd" type="Script" id=3]
+
 
 [node name="AssetSearch" type="PanelContainer"]
 anchor_right = 1.0

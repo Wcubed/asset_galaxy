@@ -5,8 +5,8 @@ extends PanelContainer
 
 signal focused(child_index, shift_pressed, ctrl_pressed)
 
-var normal_style: StyleBox = preload("res://scenes/asset_grid/asset_cell/resources/cell_unselected.stylebox")
-var selected_style: StyleBox = preload("res://scenes/asset_grid/asset_cell/resources/cell_selected.stylebox")
+var normal_style: StyleBox = preload("./resources/cell_unselected.stylebox")
+var selected_style: StyleBox = preload("./resources/cell_selected.stylebox")
 
 
 var selected: bool = false setget set_selected

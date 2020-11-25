@@ -1,7 +1,7 @@
 extends PanelContainer
 
 
-var _tag_search_item_scene: PackedScene = preload("res://scenes/asset_grid/tag_search_item/tag_search_item.tscn")
+var _tag_search_item_scene: PackedScene = preload("./tag_search_item/tag_search_item.tscn")
 
 var _galaxy: Node = null
 

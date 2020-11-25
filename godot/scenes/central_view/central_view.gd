@@ -11,7 +11,7 @@ signal selection_changed(asset_ids)
 signal asset_search_requested(title_search)
 
 
-var _asset_cell_scene: PackedScene = preload("res://scenes/asset_grid/asset_cell/asset_cell.tscn")
+var _asset_cell_scene: PackedScene = preload("./asset_cell/asset_cell.tscn")
 
 # Keeps track of the last selected cell, for the purposes of multi-selection.
 # `-1` means nothing has been selected yet.
