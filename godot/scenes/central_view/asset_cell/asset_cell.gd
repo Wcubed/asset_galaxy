@@ -3,7 +3,7 @@ extends PanelContainer
 # The name of the AssetCell will be set to the same number as the asset it
 # displays. Before the cell is added to the tree.
 
-signal focused(child_index, shift_pressed, ctrl_pressed)
+signal selection_input_recieved(child_index, shift_pressed, ctrl_pressed)
 
 var normal_style: StyleBox = preload("./resources/cell_unselected.stylebox")
 var selected_style: StyleBox = preload("./resources/cell_selected.stylebox")
@@ -63,9 +63,28 @@ func toggle_selected():
 	set_selected(not selected)
 
 
-func _on_AssetCell_focus_entered():
-	# We got either clicked, or moved through by arrow keys.
+func _on_selection_input():
+	# Get's called either when we are clicked, or moved through by mouse.
+	# or we get the focus in some other way.
 	var shift_pressed := Input.is_key_pressed(KEY_SHIFT)
 	var ctrl_pressed := Input.is_key_pressed(KEY_CONTROL)
 	
-	emit_signal("focused", get_index(), shift_pressed, ctrl_pressed)
+	emit_signal("selection_input_recieved", get_index(), shift_pressed, ctrl_pressed)
+
+
+func _on_AssetCell_focus_entered():
+	if not Input.is_mouse_button_pressed(BUTTON_LEFT):
+		# Mouse button is handled by the _gui_input function.
+		# The rest is handled via here.
+		# If everything went through here, shift selecting a range and then
+		# clicking on the last asset in that range, would not change the focus.
+		# And therefore not call this function.
+		_on_selection_input()
+
+func _gui_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_LEFT && event.pressed:
+			# We were left clicked.
+			# Regardless of whether we are already focused or not, we want
+			# to act upon this.
+			_on_selection_input()

@@ -56,7 +56,7 @@ func display_assets(asset_nodes: Array):
 			cell = _asset_cell_scene.instance()
 			_asset_grid.add_child(cell)
 			# For handling selecting and deselecting cells.
-			cell.connect("focused", self, "_on_cell_focused")
+			cell.connect("selection_input_recieved", self, "_on_cell_focused")
 		
 		cell.name = node.name
 		cell.display_asset_info(node)
