@@ -14,7 +14,7 @@ onready var folder_not_empty_notification := $NewGalaxyDialog/FolderNotEmptyNoti
 onready var load_galaxy_dialog := $LoadGalaxyDialog
 onready var add_assets_dialog := $AddAssetsDialog
 
-onready var asset_grid := find_node("AssetGrid")
+onready var central_view := find_node("CentralView")
 
 
 # Called when the node enters the scene tree for the first time.
@@ -104,6 +104,8 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 	galaxy.connect("texture_ready", self, "_on_texture_ready")
 	galaxy.connect("asset_search_completed", self, "_on_asset_search_completed")
 	
+	central_view.connect("textures_requested", galaxy, "request_textures")
+	
 	if from_disk:
 		# Load an existing galaxy from the disk.
 		galaxy.load_from_disk()
@@ -113,7 +115,7 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 	# Remember the galaxy so we can quickly open it next time.
 	user_settings.set_last_opened_galaxy(dir_path)
 	
-	asset_grid.display_assets(galaxy.get_assets())
+	central_view.display_assets(galaxy.get_assets())
 	
 	emit_signal("new_galaxy", galaxy)
 
@@ -136,21 +138,17 @@ func _add_assets(asset_paths: Array):
 	galaxy.add_assets_from_disk(asset_paths)
 	
 	# TODO: make this nicer. Dont just blatantly get all the children.
-	asset_grid.display_assets(galaxy.get_assets())
-
-
-func _on_AssetGrid_request_asset_texture(asset_id: String):
-	galaxy.request_texture(asset_id)
+	central_view.display_assets(galaxy.get_assets())
 
 func _on_texture_ready(asset_id: String, texture: ImageTexture):
-	asset_grid._on_texture_ready(asset_id, texture)
+	central_view._on_texture_ready(asset_id, texture)
 
 
 func _on_AssetGrid_asset_search_requested(title_search: String):
 	galaxy.run_asset_search(title_search)
 
 func _on_asset_search_completed(asset_nodes: Array):
-	asset_grid.display_assets(asset_nodes)
+	central_view.display_assets(asset_nodes)
 
 
 func _on_AddAssetsDialog_file_selected(path: String):

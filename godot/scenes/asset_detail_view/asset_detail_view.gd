@@ -48,7 +48,7 @@ func _display_assets(asset_ids: Array):
 		# Show detail view of single item.
 		if assets[0] != null:
 			# Make sure we get the texture at some point.
-			_galaxy.request_texture(assets[0].name)
+			_galaxy.request_textures([assets[0].name])
 			detail_label.text = assets[0].title
 		
 		tag_entry.visible = true

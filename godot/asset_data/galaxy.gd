@@ -109,13 +109,14 @@ func get_tag_ids() -> Array:
 
 # If the texture can be found, this node will emit an `texture_ready`
 # signal sometime in the future.
-func request_texture(id: String):
-	var asset := get_asset(id)
-	if asset == null:
-		return
-	
-	# Request that the full image be retrieved.
-	image_texture_pool.request_texture(id, _assets_dir_path + "/" + asset.get_filename())
+func request_textures(asset_ids: Array):
+	for id in asset_ids:
+		var asset := get_asset(id)
+		if asset == null:
+			return
+		
+		# Request that the full image be retrieved.
+		image_texture_pool.request_texture(id, _assets_dir_path + "/" + asset.get_filename())
 
 
 # Runs a search through the assets.

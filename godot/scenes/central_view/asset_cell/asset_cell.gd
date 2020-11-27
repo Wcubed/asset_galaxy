@@ -37,6 +37,8 @@ func display_asset_info(asset_node: Node):
 
 func _on_asset_data_changed():
 	title_label.text = _asset_node.title
+	# Clear out the texture, a new one will be set when we are actually visible
+	texture_rect.texture = null
 	
 	var tag_count := len(_asset_node.get_tag_ids())
 	if tag_count > 0:
@@ -46,8 +48,15 @@ func _on_asset_data_changed():
 		tag_count_panel.visible = false
 
 
+# Will get called when the asset texture has been loaded.
+# Is separate from the `display_asset_info` because the texture will only
+# be loaded when this cell is actually visible.
 func display_texture(texture: ImageTexture):
 	texture_rect.texture = texture
+
+# Whether we have the texture we need.
+func has_required_texture() -> bool:
+	return texture_rect.texture != null
 
 
 func set_selected(value: bool):

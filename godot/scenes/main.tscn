@@ -45,7 +45,7 @@ margin_right = 1012.0
 margin_bottom = 592.0
 size_flags_vertical = 3
 
-[node name="AssetGrid" parent="MainPanel/VBoxContainer/HSplitContainer" instance=ExtResource( 4 )]
+[node name="CentralView" parent="MainPanel/VBoxContainer/HSplitContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 670.0
@@ -149,14 +149,13 @@ __meta__ = {
 [node name="AutoSaveTimer" type="Timer" parent="."]
 wait_time = 300.0
 autostart = true
-[connection signal="new_galaxy" from="." to="MainPanel/VBoxContainer/HSplitContainer/AssetGrid" method="_on_new_galaxy"]
+[connection signal="new_galaxy" from="." to="MainPanel/VBoxContainer/HSplitContainer/CentralView" method="_on_new_galaxy"]
 [connection signal="new_galaxy" from="." to="MainPanel/VBoxContainer/HSplitContainer/AssetDetailView" method="_on_Main_new_galaxy"]
 [connection signal="add_assets_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_add_assets_dialog"]
 [connection signal="load_galaxy_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_load_galaxy_dialog"]
 [connection signal="new_galaxy_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_new_galaxy_dialog" binds= [ "res://" ]]
-[connection signal="asset_search_requested" from="MainPanel/VBoxContainer/HSplitContainer/AssetGrid" to="." method="_on_AssetGrid_asset_search_requested"]
-[connection signal="request_asset_texture" from="MainPanel/VBoxContainer/HSplitContainer/AssetGrid" to="." method="_on_AssetGrid_request_asset_texture"]
-[connection signal="selection_changed" from="MainPanel/VBoxContainer/HSplitContainer/AssetGrid" to="MainPanel/VBoxContainer/HSplitContainer/AssetDetailView" method="_on_AssetGrid_selection_changed"]
+[connection signal="asset_search_requested" from="MainPanel/VBoxContainer/HSplitContainer/CentralView" to="." method="_on_AssetGrid_asset_search_requested"]
+[connection signal="selection_changed" from="MainPanel/VBoxContainer/HSplitContainer/CentralView" to="MainPanel/VBoxContainer/HSplitContainer/AssetDetailView" method="_on_AssetGrid_selection_changed"]
 [connection signal="dir_selected" from="NewGalaxyDialog" to="." method="_on_NewGalaxyDialog_dir_selected"]
 [connection signal="file_selected" from="LoadGalaxyDialog" to="." method="_load_galaxy_file"]
 [connection signal="dir_selected" from="AddAssetsDialog" to="." method="_on_AddAssetsDialog_dir_selected"]
