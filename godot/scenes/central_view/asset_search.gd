@@ -9,8 +9,8 @@ var _galaxy: Node = null
 # sees the confirmation dialog.
 var _requested_tag_id_to_delete := 0
 
-onready var _search_edit: LineEdit = $MarginContainer/SearchContainer/SearchEdit
-onready var _tag_flow_container: Container = $MarginContainer/SearchContainer/TagFlowContainer
+onready var _search_edit: LineEdit = $SearchContainer/SearchEdit
+onready var _tag_flow_container: Container = $SearchContainer/TagFlowContainer
 onready var _tag_delete_confirm_dialog: Popup = $TagDeleteConfirmDialog
 
 

@@ -19,6 +19,10 @@ config/name="AssetGalaxy"
 run/main_scene="res://scenes/main.tscn"
 config/icon="res://icon.png"
 
+[gui]
+
+theme/custom="res://scenes/resources/main_theme.theme"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"

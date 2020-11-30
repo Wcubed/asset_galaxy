@@ -10,7 +10,7 @@ signal textures_requested(asset_ids)
 #       having to adjust this value manually to the cell width.
 var desired_cell_width: float = 105
 
-onready var asset_grid: GridContainer = $MarginContainer/AssetGridContainer
+onready var asset_grid: GridContainer = $AssetGridContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

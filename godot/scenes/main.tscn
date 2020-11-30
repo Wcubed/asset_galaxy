@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://scenes/resources/main_theme.theme" type="Theme" id=1]
+[ext_resource path="res://scenes/resources/panel_variant_01.stylebox" type="StyleBox" id=1]
 [ext_resource path="res://scenes/file_menu.gd" type="Script" id=2]
 [ext_resource path="res://scenes/main.gd" type="Script" id=3]
 [ext_resource path="res://scenes/central_view/central_view.tscn" type="PackedScene" id=4]
@@ -10,7 +10,6 @@
 [node name="Main" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource( 1 )
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -19,44 +18,45 @@ __meta__ = {
 [node name="MainPanel" type="PanelContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_styles/panel = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainPanel"]
-margin_left = 6.0
-margin_top = 4.0
-margin_right = 1018.0
-margin_bottom = 596.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 1019.0
+margin_bottom = 595.0
 
 [node name="MenuBar" type="HBoxContainer" parent="MainPanel/VBoxContainer"]
-margin_right = 1012.0
-margin_bottom = 22.0
+margin_right = 1014.0
+margin_bottom = 24.0
 
 [node name="FileMenu" type="MenuButton" parent="MainPanel/VBoxContainer/MenuBar"]
-margin_right = 35.0
-margin_bottom = 22.0
+margin_right = 33.0
+margin_bottom = 24.0
 text = "File"
 script = ExtResource( 2 )
 
 [node name="HSplitContainer" type="HSplitContainer" parent="MainPanel/VBoxContainer"]
-margin_top = 26.0
-margin_right = 1012.0
-margin_bottom = 592.0
+margin_top = 28.0
+margin_right = 1014.0
+margin_bottom = 590.0
 size_flags_vertical = 3
 
 [node name="CentralView" parent="MainPanel/VBoxContainer/HSplitContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 670.0
-margin_bottom = 566.0
+margin_right = 672.0
+margin_bottom = 562.0
 
 [node name="AssetDetailView" parent="MainPanel/VBoxContainer/HSplitContainer" instance=ExtResource( 6 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 678.0
-margin_right = 1012.0
-margin_bottom = 566.0
+margin_left = 680.0
+margin_right = 1014.0
+margin_bottom = 562.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
 
