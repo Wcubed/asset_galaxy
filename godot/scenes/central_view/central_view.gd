@@ -21,6 +21,8 @@ onready var _asset_grid: ScrollContainer = find_node("AssetGrid")
 onready var _grid_container: GridContainer = find_node("AssetGridContainer")
 onready var _asset_search: PanelContainer = find_node("AssetSearch")
 
+onready var _fast_grid: Container = find_node("FastGridContainer")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -28,6 +30,10 @@ func _ready():
 
 # Clears the current assets in the grid, and displays the given ones.
 func display_assets(asset_nodes: Array):
+	# TODO: move the whole asset display logic to the FastGridContainer
+	#       for now, we just pass on the assets.
+	_fast_grid.display_assets(asset_nodes)
+	
 	# TODO: allow for sorting?
 	
 	# We will re-use any existing grid cells.
