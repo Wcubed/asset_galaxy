@@ -33,12 +33,12 @@ onready var _grid_parent := Container.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	rect_clip_content = true
+	
 	add_child(_scroll_bar)
 	add_child(_grid_parent)
 	
-	_scroll_bar.connect("scrolling", self, "_update_grid_view")
-	# Can only scroll exactly 1 row at a time.
-	_scroll_bar.step = 1
+	_scroll_bar.connect("scrolling", self, "_on_scrolled")
 	
 	# Add the first child, so we know their minimal size.
 	var first_child := _child_scene.instance()
@@ -52,16 +52,28 @@ func display_assets(asset_nodes: Array):
 	_scroll_bar.value = 0
 	
 	_update_scrollbar_dimensions()
-	_update_grid_view()
+	_update_grid_child_positions()
+	_update_shown_assets()
+
 
 func texture_ready(asset_id: String, texture: ImageTexture):
 	var child := _grid_parent.get_node_or_null(asset_id)
 	if child != null:
 		child.display_texture(texture)
 
+
+func _on_scrolled():
+	_update_scrollbar_dimensions()
+	_update_grid_child_positions()
+	_update_shown_assets()
+
 # Makes sure the right grid cells display the right assets.
-func _update_grid_view():
-	var top_row := _scroll_bar.value
+func _update_shown_assets():
+	# The value might not be an exact integer.
+	# We round down to the nearest one, so the rows are consistent.
+	# And elsewhere we can use the fractional value to determine how far behind 
+	# the top border the top row should be.
+	var top_row := ceil(_scroll_bar.value)
 	var first_asset_idx := top_row * _current_columns
 	var last_asset_idx := first_asset_idx + _current_columns * _current_rows
 	
@@ -95,14 +107,15 @@ func _update_scrollbar_dimensions():
 	var scroll_factor := _scroll_bar.value / _scroll_bar.max_value
 	
 	var rows_to_fit_all_assets := max(ceil(_asset_nodes.size() / float(_current_columns)), 1)
-
+	
 	_scroll_bar.max_value = rows_to_fit_all_assets
 	
 	if rows_to_fit_all_assets >= _current_rows:
-		# The scroll bar is 1 row higher than all the rows for the assets
-		# because the last visible row can be clipped. So the user needs to 
+		# The scroll bar is 2 row higher than all the rows for the assets
+		# because the last visible row can be clipped, and during scrolling,
+		# the top row can be clipped as well. So the user needs to 
 		# be able to scroll up one more to get those assets in full view.
-		_scroll_bar.max_value += 1
+		_scroll_bar.max_value += 2
 	
 	_scroll_bar.page = clamp(_current_rows, 1, rows_to_fit_all_assets)
 	
@@ -111,13 +124,19 @@ func _update_scrollbar_dimensions():
 	_scroll_bar.value = lerp(0, rows_to_fit_all_assets, scroll_factor)
 
 
-func _notification(what):
-	if (what==NOTIFICATION_SORT_CHILDREN):
-		_calculate_layout()
+# Layout the children in a grid pattern.
+# Use the fracional part of the scroll value to determine how far behind
+# offset the top row should be.
+func _update_grid_child_positions():
+	var y_offset := fmod(_scroll_bar.value, 1) * _child_min_size.y
+	
+	for i in range(0, _grid_parent.get_child_count()):
+		var x := (i % _current_columns) * _child_min_size.x
+		var y := (i / _current_columns) * _child_min_size.y
+		y -= y_offset
+		_grid_parent.fit_child_in_rect(_grid_parent.get_child(i), Rect2(Vector2(x, y), _child_min_size))
+	
 
-func _get_minimum_size() -> Vector2:
-	# Always fit at least 1 child.
-	return _child_min_size
 
 # Makes sure the grid cells, and the scrollbar are in the right locations.
 func _calculate_layout():
@@ -139,7 +158,9 @@ func _calculate_layout():
 	# Now make sure we have as many children as fit.
 	_current_columns = floor(our_size.x / _child_min_size.x)
 	# The last row is allowed to be clipped off, so `ceil` instead of `floor`.
-	_current_rows = ceil(our_size.y / _child_min_size.y)
+	# The plus one is because when scrolling we can also clip the top row,
+	# so we need 2 "extra" bottom rows in total.
+	_current_rows = ceil(our_size.y / _child_min_size.y) + 1
 	
 	var required_children := _current_columns * _current_rows
 	var current_count := _grid_parent.get_child_count()
@@ -154,11 +175,7 @@ func _calculate_layout():
 			var new_child := _child_scene.instance()
 			_grid_parent.add_child(new_child)
 	
-	# Layout children.
-	for i in range(0, required_children):
-		var x := (i % _current_columns) * _child_min_size.x
-		var y := (i / _current_columns) * _child_min_size.y
-		_grid_parent.fit_child_in_rect(_grid_parent.get_child(i), Rect2(Vector2(x, y), _child_min_size))
+	_update_grid_child_positions()
 	
 	# See if anything changed that would necessitate updating the view
 	# or scrollbar.
@@ -166,4 +183,23 @@ func _calculate_layout():
 		_update_scrollbar_dimensions()
 		
 		# Now make sure the assets are actually displayed correctly.
-		_update_grid_view()
+		_update_shown_assets()
+
+
+func _notification(what):
+	if (what==NOTIFICATION_SORT_CHILDREN):
+		_calculate_layout()
+
+
+func _get_minimum_size() -> Vector2:
+	# Always fit at least 1 child.
+	return _child_min_size
+
+
+func _gui_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_WHEEL_UP or event.button_index == BUTTON_WHEEL_DOWN:
+			# Scrolling input.
+			# Pass through to scroll bar for consistent handling of the mouse
+			# wheel.
+			_scroll_bar._gui_input(event)
