@@ -4,12 +4,11 @@ extends Container
 # And scrolls the content over the children,
 # instead of scrolling the children themselves.
 
-# Is hopefully faster than updating a long list of children with new assets
+# Is definately faster than updating a long list of children with new assets
 # every time a search completes. And then removing all of the children when
 # there are only a few assets to display.
 
 # TODO: Implement cell selecting and deselecting and such.
-# TODO: also implement requesting the textures of the visible assets.
 # TODO: and implement scrolling with the mouse wheel.
 # TODO: And implement going though the assets with the arrow keys.
 

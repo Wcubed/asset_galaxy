@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/central_view/central_view.gd" type="Script" id=1]
-[ext_resource path="res://scenes/central_view/asset_grid.gd" type="Script" id=2]
 [ext_resource path="res://scenes/central_view/fast_grid_container.gd" type="Script" id=3]
 [ext_resource path="res://scenes/central_view/asset_search.tscn" type="PackedScene" id=4]
 
@@ -27,28 +26,10 @@ margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_vertical = 3
 
-[node name="AssetGrid" type="ScrollContainer" parent="PanelContainer2"]
-visible = false
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 1019.0
-margin_bottom = 559.0
-size_flags_horizontal = 9
-size_flags_vertical = 3
-follow_focus = true
-script = ExtResource( 2 )
-
-[node name="AssetGridContainer" type="GridContainer" parent="PanelContainer2/AssetGrid"]
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
-
 [node name="FastGridContainer" type="Container" parent="PanelContainer2"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 1019.0
 margin_bottom = 559.0
 script = ExtResource( 3 )
-[connection signal="column_amount_changed" from="PanelContainer2/AssetGrid" to="." method="_on_AssetScrollContainer_column_amount_changed"]
-[connection signal="resized" from="PanelContainer2/AssetGrid" to="PanelContainer2/AssetGrid" method="_on_resized"]
-[connection signal="textures_requested" from="PanelContainer2/AssetGrid" to="." method="_on_AssetGrid_textures_requested"]
 [connection signal="textures_requested" from="PanelContainer2/FastGridContainer" to="." method="_on_FastGridContainer_textures_requested"]
