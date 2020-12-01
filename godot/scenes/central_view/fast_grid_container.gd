@@ -63,9 +63,9 @@ func texture_ready(asset_id: String, texture: ImageTexture):
 
 
 func _on_scrolled():
-	_update_scrollbar_dimensions()
 	_update_grid_child_positions()
 	_update_shown_assets()
+
 
 # Makes sure the right grid cells display the right assets.
 func _update_shown_assets():
@@ -73,7 +73,7 @@ func _update_shown_assets():
 	# We round down to the nearest one, so the rows are consistent.
 	# And elsewhere we can use the fractional value to determine how far behind 
 	# the top border the top row should be.
-	var top_row := ceil(_scroll_bar.value)
+	var top_row := floor(_scroll_bar.value)
 	var first_asset_idx := top_row * _current_columns
 	var last_asset_idx := first_asset_idx + _current_columns * _current_rows
 	
