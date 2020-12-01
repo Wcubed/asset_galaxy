@@ -51,3 +51,4 @@ script = ExtResource( 3 )
 [connection signal="column_amount_changed" from="PanelContainer2/AssetGrid" to="." method="_on_AssetScrollContainer_column_amount_changed"]
 [connection signal="resized" from="PanelContainer2/AssetGrid" to="PanelContainer2/AssetGrid" method="_on_resized"]
 [connection signal="textures_requested" from="PanelContainer2/AssetGrid" to="." method="_on_AssetGrid_textures_requested"]
+[connection signal="textures_requested" from="PanelContainer2/FastGridContainer" to="." method="_on_FastGridContainer_textures_requested"]

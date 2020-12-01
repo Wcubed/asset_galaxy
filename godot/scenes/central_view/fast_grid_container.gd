@@ -13,6 +13,8 @@ extends Container
 # TODO: and implement scrolling with the mouse wheel.
 # TODO: And implement going though the assets with the arrow keys.
 
+signal textures_requested(asset_ids)
+
 # Child scene should have a constant minimum size.
 # Otherwise the layout messes up.
 var _child_scene := preload("./asset_cell/asset_cell.tscn")
@@ -53,22 +55,41 @@ func display_assets(asset_nodes: Array):
 	_update_scrollbar_dimensions()
 	_update_grid_view()
 
+func texture_ready(asset_id: String, texture: ImageTexture):
+	var child := _grid_parent.get_node_or_null(asset_id)
+	if child != null:
+		child.display_texture(texture)
+
 # Makes sure the right grid cells display the right assets.
 func _update_grid_view():
 	var top_row := _scroll_bar.value
 	var first_asset_idx := top_row * _current_columns
 	var last_asset_idx := first_asset_idx + _current_columns * _current_rows
 	
-	var asset_idx := first_asset_idx
+	var texture_ids := []
+	
+	# First make sure the names do not overlap.
+	for child in _grid_parent.get_children():
+		child.name = "__"
+	
+	var asset_idx := int(first_asset_idx)
 	for child in _grid_parent.get_children():
 		if asset_idx < _asset_nodes.size():
 			child.visible = true
-			child.display_asset_info(_asset_nodes[asset_idx])
+			
+			var asset: Node = _asset_nodes[asset_idx]
+			child.display_asset_info(asset)
+			# We can later set the texture via the node name.
+			child.name = asset.name
+			texture_ids.append(asset.name)
 		else:
 			# There is no asset for this child at the moment.
 			child.visible = false
+			child.clear()
 		
 		asset_idx += 1
+	
+	emit_signal("textures_requested", texture_ids)
 
 
 func _update_scrollbar_dimensions():

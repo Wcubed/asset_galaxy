@@ -23,6 +23,14 @@ func _ready():
 	set_selected(false)
 
 
+func clear():
+	if _asset_node != null:
+		_asset_node.disconnect("data_changed", self, "_on_asset_data_changed")
+		_asset_node = null
+	
+	texture_rect.texture = null
+
+
 func display_asset_info(asset_node: Node):
 	if _asset_node != null:
 		# Disconnect the previous update signal.

@@ -121,6 +121,8 @@ func _on_texture_ready(asset_id: String, texture: ImageTexture):
 		return
 	
 	cell.display_texture(texture)
+	
+	_fast_grid.texture_ready(asset_id, texture)
 
 
 # Handles selecting and deselecting cells.
@@ -173,4 +175,8 @@ func _on_AssetScrollContainer_column_amount_changed():
 
 
 func _on_AssetGrid_textures_requested(asset_ids):
+	emit_signal("textures_requested", asset_ids)
+
+
+func _on_FastGridContainer_textures_requested(asset_ids):
 	emit_signal("textures_requested", asset_ids)
