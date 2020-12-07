@@ -63,6 +63,11 @@ func _ready():
 	first_child.connect("selection_input_recieved", self, "_on_asset_selection_input_received")
 
 
+# Same as `rect_clip_content` except for gui input.
+func _clips_input():
+	return true
+
+
 func display_assets(asset_nodes: Array):
 	_asset_nodes = asset_nodes
 	# New assets, so scroll all the way up.

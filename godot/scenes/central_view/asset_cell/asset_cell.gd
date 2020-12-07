@@ -49,10 +49,9 @@ func display_asset_info(asset_node: Node, list_index: int):
 	_on_asset_data_changed()
 
 
+# Call when data changes. Assumes texture stays the same.
 func _on_asset_data_changed():
 	title_label.text = _asset_node.title
-	# Clear out the texture, a new one will be set when we are actually visible
-	texture_rect.texture = null
 	
 	var tag_count := len(_asset_node.get_tag_ids())
 	if tag_count > 0:

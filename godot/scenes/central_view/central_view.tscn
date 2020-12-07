@@ -31,7 +31,6 @@ margin_left = 5.0
 margin_top = 5.0
 margin_right = 1019.0
 margin_bottom = 559.0
-rect_clip_content = true
 script = ExtResource( 3 )
 [connection signal="selection_changed" from="PanelContainer2/FastGridContainer" to="." method="_on_FastGridContainer_selection_changed"]
 [connection signal="textures_requested" from="PanelContainer2/FastGridContainer" to="." method="_on_FastGridContainer_textures_requested"]
