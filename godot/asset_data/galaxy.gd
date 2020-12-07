@@ -16,6 +16,20 @@ const SAVEKEY_FORMAT = "save_format"
 const SAVE_FORMAT_VERSION = 1
 const SAVEKEY_TAGS = "tags"
 
+# Licences dictate what you can do with a particular asset.
+# An example would be: CC0 (public domain)
+# For new assets, defaults to 0: "Unknown"
+# Can also be used to indicate original content made by the user of the
+# program, or assets they have bought.
+# Integer to licence name. This is a dictinary instead of a list, so that
+# re-ordering things here won't mess up older saves.
+const _LICENSES := {
+	0: "Unknown",
+	1: "Original content",
+	2: "Bought",
+	3: "CC0"
+}
+
 
 var _asset_scene: PackedScene = preload("res://asset_data/asset.tscn")
 
@@ -106,6 +120,20 @@ func get_tag_text(tag_id: int) -> String:
 
 func get_tag_ids() -> Array:
 	return _tags.keys()
+
+
+func get_licenses() -> Dictionary:
+	return _LICENSES
+
+
+func get_license_text(license_id: int) -> String:
+	return _LICENSES.get(license_id, _LICENSES[0])
+
+
+func change_license_for_assets(asset_ids: Array, new_license: int):
+	if new_license in _LICENSES:
+		for id in asset_ids:
+			get_asset(id).license_id = new_license
 
 # If the texture can be found, this node will emit an `texture_ready`
 # signal sometime in the future.

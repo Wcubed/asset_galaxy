@@ -16,6 +16,10 @@ onready var tags_some_have_list := find_node("TagsSomeHaveList")
 onready var tags_all_have_label := find_node("AllSelectedTagsLabel")
 onready var tags_some_have_label := find_node("SomeSelectedTagsLabel")
 
+onready var license_container := find_node("LicenseContainer")
+onready var license_label := find_node("LicenseLabel")
+onready var license_change_button := find_node("LicenseChangeButton")
+
 onready var confirm_delete_dialog := $ConfirmDeleteDialog
 
 # Called when the node enters the scene tree for the first time.
@@ -43,7 +47,9 @@ func _display_assets(asset_ids: Array):
 		# Selection was cleared.
 		detail_label.text = ""
 		tag_entry.visible = false
+		license_container.visible = false
 		delete_button.visible = false
+		
 	elif amount == 1:
 		# Show detail view of single item.
 		if assets[0] != null:
@@ -52,13 +58,37 @@ func _display_assets(asset_ids: Array):
 			detail_label.text = assets[0].title
 		
 		tag_entry.visible = true
+		
+		license_container.visible = true
+		license_label.text = "License: %s" % _galaxy.get_license_text(assets[0].license_id)
+		license_change_button.text = "Change license"
+		
 		delete_button.visible = true
 		delete_button.text = "Delete Asset"
+		
 	else:
 		# Show details of multiple items.
 		detail_label.text = "%s selected" % amount
 		
 		tag_entry.visible = true
+		
+		license_container.visible = true
+		# Count the licenses
+		var license_counts := {}
+		for asset in assets:
+			var license = asset.license_id
+			license_counts[license] = license_counts.get(license, 0) + 1
+		
+		var license_text := ""
+		for key in license_counts:
+			var text: String = _galaxy.get_license_text(key)
+			license_text += " %s %s," % [license_counts[key], text]
+		# Remove the last trailing comma.
+		license_text = license_text.left(license_text.length() - 1)
+		
+		license_label.text = "Licenses:%s" % license_text
+		license_change_button.text = "Change licenses"
+		
 		delete_button.visible = true
 		delete_button.text = "Delete %s Assets" % amount
 	
@@ -116,6 +146,12 @@ func _on_Main_new_galaxy(galaxy_node):
 	tags_all_have_list._on_galaxy_changed(galaxy_node)
 	tags_some_have_list._on_galaxy_changed(galaxy_node)
 	tag_entry._on_galaxy_changed(galaxy_node)
+	
+	# Add the possible licenses to the selection button.
+	license_change_button.clear()
+	var licenses: Dictionary = _galaxy.get_licenses()
+	for license in licenses:
+		license_change_button.add_item(licenses[license], license)
 
 
 func _on_texture_ready(texture_name, texture):
@@ -156,3 +192,10 @@ func _on_tag_list_changed():
 	# because tags might have been removed.
 	_display_assets(_current_selection)
 
+
+
+func _on_LicenseChangeButton_item_selected(license_index: int):
+	_galaxy.change_license_for_assets(_current_selection, license_index)
+	
+	# Re-display the assets. To reflect the update.
+	_display_assets(_current_selection)

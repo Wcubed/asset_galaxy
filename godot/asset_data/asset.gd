@@ -5,11 +5,14 @@ extends Node
 # Emitted when any data of the asset changes.
 signal data_changed()
 
-
+# Mandatory keys.
 const SAVEKEY_ID = "id"
 const SAVEKEY_EXTENSION = "ext"
 const SAVEKEY_TITLE = "title"
+# Optional keys.
 const SAVEKEY_TAGS = "tags"
+const SAVEKEY_LICENSE = "license"
+const DEFAULT_LICENSE = 0
 
 # File extension of the asset.
 # Will be set before the node is added to the tree.
@@ -19,7 +22,11 @@ var extension: String = ""
 var title: String = "" setget set_title
 
 # Array of integers, which index into the tag dicitonary.
+# Should not be edited directly.
 var _tags: Array = []
+
+# Id into the license dictionary of `galaxy.gd`
+var license_id: int = DEFAULT_LICENSE setget set_license_id
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -52,29 +59,45 @@ func set_title(new_title: String):
 	emit_signal("data_changed")
 
 
+func set_license_id(new_license: int):
+	license_id = new_license
+	
+	emit_signal("data_changed")
+
+
 # Converts this node into a dictionary that can be saved.
 func to_dict() -> Dictionary:
+	# ---- Mandatory keys ----
 	var dict := {
 		SAVEKEY_ID: name,
 		SAVEKEY_EXTENSION: extension,
 		SAVEKEY_TITLE: title,
 	}
 	
+	# ---- Optional keys ----
 	if len(_tags) > 0:
-		# No need in saving the tags if there aren't any.
+		# Only save the tags if there are any.
 		dict[SAVEKEY_TAGS] = _tags
+	
+	if license_id != DEFAULT_LICENSE:
+		# Only save the license if it deviates from the default.
+		dict[SAVEKEY_LICENSE] = license_id
 	
 	return dict
 
 
 # Sets this node's state from a dictionary.
 func from_dict(dict: Dictionary):
+	# ---- Mandatory keys ----
 	# TODO: check for missing values.
 	self.name = dict[SAVEKEY_ID]
 	self.extension = dict[SAVEKEY_EXTENSION]
 	self.title = dict[SAVEKEY_TITLE]
 	
+	# ---- Optional keys ----
 	if dict.has(SAVEKEY_TAGS):
 		# Make sure we dont read in floats, or strings.
 		for tag in dict[SAVEKEY_TAGS]:
 			_tags.append(int(tag))
+	
+	license_id = int(dict.get(SAVEKEY_LICENSE, DEFAULT_LICENSE))
