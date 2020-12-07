@@ -237,6 +237,18 @@ func _gui_input(event):
 			_scroll_bar._gui_input(event)
 
 
+func _unhandled_input(event):
+	if event.is_action_pressed("ui_select_all"):
+		get_tree().set_input_as_handled()
+		
+		# Select everything!
+		for i in range(0, _asset_nodes.size()):
+			_selected_asset_indexes[i] = null
+			
+		_update_shown_assets()
+		_emit_selection_changed_signal()
+
+
 func _on_asset_selection_input_received(list_index: int, shift_pressed: bool, ctrl_pressed: bool):
 	if shift_pressed:
 		# Select a range.
@@ -263,6 +275,10 @@ func _on_asset_selection_input_received(list_index: int, shift_pressed: bool, ct
 		var asset_index := _topleft_asset_index + i
 		_grid_parent.get_child(i).set_selected(asset_index in _selected_asset_indexes)
 	
+	_emit_selection_changed_signal()
+
+
+func _emit_selection_changed_signal():
 	# Figure out which asset node id's correspond to the selection we now have.
 	var selected_asset_ids := [] 
 	for key in _selected_asset_indexes.keys():
