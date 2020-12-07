@@ -20,44 +20,48 @@ margin_bottom = 595.0
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
 margin_right = 1014.0
+margin_bottom = 211.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand = true
 stretch_mode = 6
 
 [node name="DetailLabel" type="Label" parent="VBoxContainer"]
-margin_top = 4.0
+margin_top = 215.0
 margin_right = 1014.0
-margin_bottom = 26.0
+margin_bottom = 237.0
 align = 1
 
 [node name="AllSelectedTagsLabel" type="Label" parent="VBoxContainer"]
-margin_top = 30.0
+margin_top = 241.0
 margin_right = 1014.0
-margin_bottom = 52.0
+margin_bottom = 263.0
 text = "All selected assets have these tags:"
 
 [node name="TagsAllHaveList" parent="VBoxContainer" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 56.0
+margin_top = 267.0
 margin_right = 1014.0
-margin_bottom = 56.0
+margin_bottom = 267.0
 
 [node name="SomeSelectedTagsLabel" type="Label" parent="VBoxContainer"]
-margin_top = 60.0
+margin_top = 271.0
 margin_right = 1014.0
-margin_bottom = 82.0
+margin_bottom = 293.0
 text = "Some selected assets have these tags:"
 
 [node name="TagsSomeHaveList" parent="VBoxContainer" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 86.0
+margin_top = 297.0
 margin_right = 1014.0
-margin_bottom = 86.0
+margin_bottom = 297.0
 
 [node name="TagEntry" type="LineEdit" parent="VBoxContainer"]
-margin_top = 90.0
+margin_top = 301.0
 margin_right = 1014.0
-margin_bottom = 112.0
+margin_bottom = 323.0
 context_menu_enabled = false
 clear_button_enabled = true
 placeholder_text = "Add tag"
@@ -69,9 +73,9 @@ margin_bottom = 20.0
 focus_mode = 0
 
 [node name="LicenseContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 116.0
+margin_top = 327.0
 margin_right = 1014.0
-margin_bottom = 138.0
+margin_bottom = 349.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -89,7 +93,7 @@ margin_right = 1014.0
 margin_bottom = 22.0
 
 [node name="Spacer" type="Control" parent="VBoxContainer"]
-margin_top = 142.0
+margin_top = 353.0
 margin_right = 1014.0
 margin_bottom = 564.0
 size_flags_vertical = 3
