@@ -8,11 +8,13 @@ extends Container
 # every time a search completes. And then removing all of the children when
 # there are only a few assets to display.
 
-# TODO: Implement cell selecting and deselecting and such.
-# TODO: and implement scrolling with the mouse wheel.
-# TODO: And implement going though the assets with the arrow keys.
+# TODO: implement going though the assets with the arrow keys.
 
 signal textures_requested(asset_ids)
+
+# Emitted when the user selects or deselects assets.
+# Passes an array of selected id's.
+signal selection_changed(asset_ids)
 
 # Child scene should have a constant minimum size.
 # Otherwise the layout messes up.
@@ -23,8 +25,22 @@ var _child_min_size := Vector2()
 var _current_columns: int = 1
 var _current_rows: int = 1
 
+# Topmost row, and the local list index of the top-left asset displayed.
+var _top_row: int = 0
+var _topleft_asset_index: int = 0
+
 # Assets that we want to display.
 var _asset_nodes := []
+
+# Keeps track of which assets are selected.
+# Just a dictionary we misuse as a Set, by keeping the values `null`.
+# Probably not the fastest or best way of doing it.
+var _selected_asset_indexes := {}
+
+# Remember the last asset that was selected, to allow for selecting ranges
+# with the shift key.
+var _last_selected_asset_index = 0
+
 
 onready var _scroll_bar := VScrollBar.new()
 # Parent for all the grid children, so things like the scrollbar don't
@@ -44,12 +60,16 @@ func _ready():
 	var first_child := _child_scene.instance()
 	_grid_parent.add_child(first_child)
 	_child_min_size = first_child.get_combined_minimum_size()
+	first_child.connect("selection_input_recieved", self, "_on_asset_selection_input_received")
 
 
 func display_assets(asset_nodes: Array):
 	_asset_nodes = asset_nodes
 	# New assets, so scroll all the way up.
 	_scroll_bar.value = 0
+	
+	_selected_asset_indexes = {}
+	_last_selected_asset_index = 0
 	
 	_update_scrollbar_dimensions()
 	_update_grid_child_positions()
@@ -73,9 +93,9 @@ func _update_shown_assets():
 	# We round down to the nearest one, so the rows are consistent.
 	# And elsewhere we can use the fractional value to determine how far behind 
 	# the top border the top row should be.
-	var top_row := floor(_scroll_bar.value)
-	var first_asset_idx := top_row * _current_columns
-	var last_asset_idx := first_asset_idx + _current_columns * _current_rows
+	_top_row = floor(_scroll_bar.value)
+	_topleft_asset_index = _top_row * _current_columns
+	var last_asset_idx := _topleft_asset_index + _current_columns * _current_rows
 	
 	var texture_ids := []
 	
@@ -83,13 +103,18 @@ func _update_shown_assets():
 	for child in _grid_parent.get_children():
 		child.name = "__"
 	
-	var asset_idx := int(first_asset_idx)
+	var asset_idx := int(_topleft_asset_index)
 	for child in _grid_parent.get_children():
 		if asset_idx < _asset_nodes.size():
 			child.visible = true
 			
 			var asset: Node = _asset_nodes[asset_idx]
-			child.display_asset_info(asset)
+			
+			child.display_asset_info(asset, asset_idx)
+			
+			var selected := asset_idx in _selected_asset_indexes
+			child.set_selected(selected)
+			
 			# We can later set the texture via the node name.
 			child.name = asset.name
 			texture_ids.append(asset.name)
@@ -174,6 +199,8 @@ func _calculate_layout():
 		for i in range(current_count, required_children):
 			var new_child := _child_scene.instance()
 			_grid_parent.add_child(new_child)
+			
+			new_child.connect("selection_input_recieved", self, "_on_asset_selection_input_received")
 	
 	_update_grid_child_positions()
 	
@@ -203,3 +230,37 @@ func _gui_input(event):
 			# Pass through to scroll bar for consistent handling of the mouse
 			# wheel.
 			_scroll_bar._gui_input(event)
+
+
+func _on_asset_selection_input_received(list_index: int, shift_pressed: bool, ctrl_pressed: bool):
+	if shift_pressed:
+		# Select a range.
+		var start := min(_last_selected_asset_index, list_index)
+		var stop := max(_last_selected_asset_index, list_index)
+		
+		for i in range(start, stop + 1):
+			_selected_asset_indexes[i] = null
+	elif ctrl_pressed:
+		# Toggle-select just this asset.
+		if list_index in _selected_asset_indexes:
+			_selected_asset_indexes.erase(list_index)
+		else:
+			_selected_asset_indexes[list_index] = null
+	else:
+		# De-select everything else.
+		_selected_asset_indexes.clear()
+		_selected_asset_indexes[list_index] = null
+	
+	_last_selected_asset_index = list_index
+	
+	# Update the view.
+	for i in range(0, _grid_parent.get_child_count()):
+		var asset_index := _topleft_asset_index + i
+		_grid_parent.get_child(i).set_selected(asset_index in _selected_asset_indexes)
+	
+	# Figure out which asset node id's correspond to the selection we now have.
+	var selected_asset_ids := [] 
+	for key in _selected_asset_indexes.keys():
+		selected_asset_ids.append(_asset_nodes[key].name)
+	# And let everyone else know.
+	emit_signal("selection_changed", selected_asset_ids)

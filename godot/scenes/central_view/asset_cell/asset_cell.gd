@@ -3,7 +3,7 @@ extends PanelContainer
 # The name of the AssetCell will be set to the same number as the asset it
 # displays. Before the cell is added to the tree.
 
-signal selection_input_recieved(child_index, shift_pressed, ctrl_pressed)
+signal selection_input_recieved(list_index, shift_pressed, ctrl_pressed)
 
 var normal_style: StyleBox = preload("./resources/cell_unselected.stylebox")
 var selected_style: StyleBox = preload("./resources/cell_selected.stylebox")
@@ -12,6 +12,9 @@ var selected_style: StyleBox = preload("./resources/cell_selected.stylebox")
 var selected: bool = false setget set_selected
 
 var _asset_node: Node = null
+# Where in the list the current asset is located.
+# for selection purposes.
+var _list_index: int = 0
 
 onready var title_label: Label = $MarginContainer/VBoxContainer/HBoxContainer/Title
 onready var texture_rect: TextureRect = $MarginContainer/VBoxContainer/TextureRect
@@ -31,12 +34,15 @@ func clear():
 	texture_rect.texture = null
 
 
-func display_asset_info(asset_node: Node):
+# list_index: Where in the list the current asset is located.
+#           for selection purposes.
+func display_asset_info(asset_node: Node, list_index: int):
 	if _asset_node != null:
 		# Disconnect the previous update signal.
 		_asset_node.disconnect("data_changed", self, "_on_asset_data_changed")
 	
 	_asset_node = asset_node
+	_list_index = list_index
 	
 	# Subscribe to updates.
 	asset_node.connect("data_changed", self, "_on_asset_data_changed")
@@ -86,7 +92,7 @@ func _on_selection_input():
 	var shift_pressed := Input.is_key_pressed(KEY_SHIFT)
 	var ctrl_pressed := Input.is_key_pressed(KEY_CONTROL)
 	
-	emit_signal("selection_input_recieved", get_index(), shift_pressed, ctrl_pressed)
+	emit_signal("selection_input_recieved", _list_index, shift_pressed, ctrl_pressed)
 
 
 func _on_AssetCell_focus_entered():

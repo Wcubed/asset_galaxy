@@ -36,5 +36,9 @@ func _on_new_galaxy(galaxy_node: Node):
 	_asset_search._on_new_galaxy(galaxy_node)
 
 
-func _on_FastGridContainer_textures_requested(asset_ids):
+func _on_FastGridContainer_textures_requested(asset_ids: Array):
 	emit_signal("textures_requested", asset_ids)
+
+
+func _on_FastGridContainer_selection_changed(asset_ids: Array):
+	emit_signal("selection_changed", asset_ids)
