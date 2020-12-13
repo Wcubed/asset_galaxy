@@ -7,6 +7,9 @@ var galaxy_scene: PackedScene = preload("res://asset_data/galaxy.tscn")
 # Our current project.
 var galaxy: Node = null
 
+# Default galaxy to create or open when there is no galaxy yet.
+onready var DEFAULT_GALAXY_PATH := "user://default_galaxy"
+
 onready var user_settings := $UserSettings
 
 onready var new_galaxy_dialog := $NewGalaxyDialog
@@ -22,10 +25,29 @@ func _ready():
 	# We want to save before quiting.
 	get_tree().set_auto_accept_quit(false)
 	
+	var open_default_galaxy = true
+	
 	# Can we load a previously loaded galaxy?
 	# So that the user can immediately continue where they left off?
 	if user_settings.last_opened_galaxy != "":
-		_load_galaxy_dir(user_settings.last_opened_galaxy)
+		open_default_galaxy = not _load_galaxy_dir(user_settings.last_opened_galaxy)
+	
+	if open_default_galaxy:
+		# Open or create the default galaxy.
+		var global_path := ProjectSettings.globalize_path(DEFAULT_GALAXY_PATH)
+		
+		# Remove any galaxy that failed to load.
+		remove_child(galaxy)
+		galaxy = null
+		
+		var dir := Directory.new()
+		dir.make_dir_recursive(global_path)
+		if not _load_galaxy_dir(global_path):
+			# Remove the galaxy that failed to load.
+			remove_child(galaxy)
+			galaxy = null
+			_new_galaxy(global_path)
+		
 
 
 # This is where the application's `quit` request is handled.
@@ -90,7 +112,8 @@ func _is_directory_empty(path: String) -> bool:
 
 
 # `from_disk`, if true it will attempt to load the galaxy from the disk.
-func _new_galaxy(dir_path: String, from_disk: bool = false):
+# If the load fails, will return false.
+func _new_galaxy(dir_path: String, from_disk: bool = false) -> bool:
 	# Save the project that we had open.
 	if galaxy:
 		galaxy.save()
@@ -108,7 +131,9 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 	
 	if from_disk:
 		# Load an existing galaxy from the disk.
-		galaxy.load_from_disk()
+		var result = galaxy.load_from_disk()
+		if not result:
+			return false
 	else:
 		galaxy.save()
 	
@@ -118,11 +143,13 @@ func _new_galaxy(dir_path: String, from_disk: bool = false):
 	central_view.display_assets(galaxy.get_assets())
 	
 	emit_signal("new_galaxy", galaxy)
+	
+	return true
 
 
 # Load a galaxy project from a directory.
-func _load_galaxy_dir(dir_path: String):
-	_new_galaxy(dir_path, true)
+func _load_galaxy_dir(dir_path: String) -> bool:
+	return _new_galaxy(dir_path, true)
 
 # Load a galaxy project given a "galaxy.json" file.
 # actually calls `_load_galaxy_dir` internally.

@@ -149,8 +149,8 @@ __meta__ = {
 [node name="AutoSaveTimer" type="Timer" parent="."]
 wait_time = 300.0
 autostart = true
-[connection signal="new_galaxy" from="." to="MainPanel/VBoxContainer/HSplitContainer/AssetDetailView" method="_on_Main_new_galaxy"]
 [connection signal="new_galaxy" from="." to="MainPanel/VBoxContainer/HSplitContainer/CentralView" method="_on_new_galaxy"]
+[connection signal="new_galaxy" from="." to="MainPanel/VBoxContainer/HSplitContainer/AssetDetailView" method="_on_Main_new_galaxy"]
 [connection signal="add_assets_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_add_assets_dialog"]
 [connection signal="load_galaxy_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_load_galaxy_dialog"]
 [connection signal="new_galaxy_pressed" from="MainPanel/VBoxContainer/MenuBar/FileMenu" to="." method="_open_new_galaxy_dialog" binds= [ "res://" ]]

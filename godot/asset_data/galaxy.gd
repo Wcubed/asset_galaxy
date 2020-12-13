@@ -308,13 +308,14 @@ func save():
 	print("Save done.")
 
 
-func load_from_disk():
+# Returns false when the load failed.
+func load_from_disk() -> bool:
 	var file := File.new()
 	var file_name := save_dir_path + "/" + SAVE_FILE_NAME
 	
 	if not file.file_exists(file_name):
 		# TODO: show some kind of message.
-		return
+		return false
 	
 	file.open(file_name, File.READ)
 	
@@ -356,6 +357,7 @@ func load_from_disk():
 	
 	# Done!
 	print("Loaded %s assets." % _assets.get_child_count())
+	return true
 
 
 func _on_ImageTexturePool_texture_ready(texture_name, texture):
