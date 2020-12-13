@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/asset_detail_view/url_view.gd" type="Script" id=1]
+
+[node name="UrlView" type="HBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_top = 289.0
+margin_right = 31.0
+margin_bottom = 311.0
+text = "Url:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UrlEdit" type="LineEdit" parent="."]
+margin_left = 35.0
+margin_right = 1008.0
+margin_bottom = 600.0
+hint_tooltip = "Click to copy"
+size_flags_horizontal = 3
+
+[node name="EditButton" type="Button" parent="."]
+margin_left = 1012.0
+margin_right = 1024.0
+margin_bottom = 600.0
+[connection signal="gui_input" from="UrlEdit" to="." method="_on_UrlEdit_gui_input"]
+[connection signal="text_entered" from="UrlEdit" to="." method="_on_UrlEdit_text_entered"]
+[connection signal="gui_input" from="EditButton" to="." method="_on_EditButton_gui_input"]
+[connection signal="pressed" from="EditButton" to="." method="_on_EditButton_pressed"]

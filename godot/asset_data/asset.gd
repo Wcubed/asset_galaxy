@@ -13,6 +13,7 @@ const SAVEKEY_TITLE = "title"
 const SAVEKEY_TAGS = "tags"
 const SAVEKEY_LICENSE = "license"
 const DEFAULT_LICENSE = 0
+const SAVEKEY_SOURCEURL = "url"
 
 # File extension of the asset.
 # Will be set before the node is added to the tree.
@@ -27,6 +28,9 @@ var _tags: Array = []
 
 # Id into the license dictionary of `galaxy.gd`
 var license_id: int = DEFAULT_LICENSE setget set_license_id
+
+# Url to the asset's source. If applicable.
+var source_url: String = "" setget set_source_url
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -65,6 +69,12 @@ func set_license_id(new_license: int):
 	emit_signal("data_changed")
 
 
+func set_source_url(new_url: String):
+	source_url = new_url
+	
+	emit_signal("data_changed")
+
+
 # Converts this node into a dictionary that can be saved.
 func to_dict() -> Dictionary:
 	# ---- Mandatory keys ----
@@ -82,6 +92,9 @@ func to_dict() -> Dictionary:
 	if license_id != DEFAULT_LICENSE:
 		# Only save the license if it deviates from the default.
 		dict[SAVEKEY_LICENSE] = license_id
+	
+	if source_url != "":
+		dict[SAVEKEY_SOURCEURL] = source_url
 	
 	return dict
 
@@ -101,3 +114,4 @@ func from_dict(dict: Dictionary):
 			_tags.append(int(tag))
 	
 	license_id = int(dict.get(SAVEKEY_LICENSE, DEFAULT_LICENSE))
+	source_url = dict.get(SAVEKEY_SOURCEURL, "")

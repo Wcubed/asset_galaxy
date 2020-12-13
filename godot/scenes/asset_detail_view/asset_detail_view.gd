@@ -20,6 +20,8 @@ onready var license_container := find_node("LicenseContainer")
 onready var license_label := find_node("LicenseLabel")
 onready var license_change_button := find_node("LicenseChangeButton")
 
+onready var url_view := find_node("UrlView")
+
 onready var confirm_delete_dialog := $ConfirmDeleteDialog
 
 # Called when the node enters the scene tree for the first time.
@@ -49,6 +51,7 @@ func _display_assets(asset_ids: Array):
 		tag_entry.visible = false
 		license_container.visible = false
 		delete_button.visible = false
+		url_view.visible = false
 		
 	elif amount == 1:
 		# Show detail view of single item.
@@ -62,6 +65,9 @@ func _display_assets(asset_ids: Array):
 		license_container.visible = true
 		license_label.text = "License: %s" % _galaxy.get_license_text(assets[0].license_id)
 		license_change_button.text = "Change license"
+		
+		url_view.visible = true
+		url_view.display_asset_node(assets[0])
 		
 		delete_button.visible = true
 		delete_button.text = "Delete Asset"
@@ -88,6 +94,10 @@ func _display_assets(asset_ids: Array):
 		
 		license_label.text = "Licenses:%s" % license_text
 		license_change_button.text = "Change licenses"
+		
+		# No clue how to nicely display (and allow editing of) the source
+		# urls of multiple assets. So we don't.
+		url_view.visible = false
 		
 		delete_button.visible = true
 		delete_button.text = "Delete %s Assets" % amount
@@ -199,3 +209,9 @@ func _on_LicenseChangeButton_item_selected(license_index: int):
 	
 	# Re-display the assets. To reflect the update.
 	_display_assets(_current_selection)
+
+
+func _on_UrlEdit_text_entered(new_url: String):
+	# We only allow setting source urls when displaying a single asset.
+	if _current_selection.size() == 1:
+		_galaxy.set_source_url_on_asset(_current_selection[0], new_url)

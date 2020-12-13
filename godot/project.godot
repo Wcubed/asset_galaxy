@@ -19,6 +19,10 @@ config/name="AssetGalaxy"
 run/main_scene="res://scenes/main.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/energy_saving/keep_screen_on=false
+
 [gui]
 
 theme/custom="res://scenes/resources/main_theme.theme"

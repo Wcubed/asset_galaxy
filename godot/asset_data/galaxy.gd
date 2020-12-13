@@ -135,6 +135,13 @@ func change_license_for_assets(asset_ids: Array, new_license: int):
 		for id in asset_ids:
 			get_asset(id).license_id = new_license
 
+
+func set_source_url_on_asset(id: String, new_url: String):
+	var asset := get_asset(id)
+	if asset != null:
+		asset.source_url = new_url
+
+
 # If the texture can be found, this node will emit an `texture_ready`
 # signal sometime in the future.
 func request_textures(asset_ids: Array):
