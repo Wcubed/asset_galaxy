@@ -96,13 +96,13 @@ func _input(event):
 		return
 	
 	# Navigate the autocomplete popup.
-	if Input.is_action_just_pressed("ui_accept"):
+	if event.is_action_pressed("ui_accept"):
 		# Don't propagate the action further.
 		# That way, the text entries own "accept" code will not fire.
 		get_tree().set_input_as_handled()
 		_accept_input()
 		
-	elif Input.is_action_just_pressed("ui_down"):
+	elif event.is_action_pressed("ui_down"):
 		# Don't propagate the action further.
 		# That way the gui focus change code will not fire.
 		get_tree().set_input_as_handled()
@@ -111,7 +111,7 @@ func _input(event):
 		if _current_autocomplete_idx != _auto_complete_popup.get_item_count() - 1:
 			_check_autocomplete_item(_current_autocomplete_idx + 1)
 	
-	elif Input.is_action_just_pressed("ui_up"):
+	elif event.is_action_pressed("ui_up"):
 		# Don't propagate the action further.
 		# That way the gui focus change code will not fire.
 		get_tree().set_input_as_handled()

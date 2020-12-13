@@ -50,17 +50,19 @@ func _on_UrlEdit_text_entered(new_url: String):
 	_cancel_editing()
 
 
-func _on_UrlEdit_gui_input(event):
+func _on_EditButton_gui_input(event):
 	if event.is_action_pressed("ui_cancel"):
 		_cancel_editing()
 		get_tree().set_input_as_handled()
 
 
 
-func _on_EditButton_gui_input(event):
+func _on_UrlEdit_gui_input(event):
 	# When the user clicks on the link edit, when not actually editing the link
-	# we copy it to the clipboard.
+	# we try to open the appropriate program.
 	if _edit.editable == false:
 		if event is InputEventMouseButton:
 			if event.pressed == true and event.button_index == BUTTON_LEFT:
-				OS.clipboard = _current_asset_node.source_url
+				var result := OS.shell_open(_current_asset_node.source_url)
+				
+				get_tree().set_input_as_handled()

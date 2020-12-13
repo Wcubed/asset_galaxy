@@ -23,7 +23,7 @@ __meta__ = {
 margin_left = 35.0
 margin_right = 1008.0
 margin_bottom = 600.0
-hint_tooltip = "Click to copy"
+hint_tooltip = "Click to open. Ctrl + C to copy."
 size_flags_horizontal = 3
 
 [node name="EditButton" type="Button" parent="."]
