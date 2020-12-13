@@ -175,22 +175,22 @@ func run_asset_search(title_search: String, tag_search: Array):
 			found_assets.append(asset)
 	
 	# Now check the tags.
-	# We currently go for an "OR" approach: an asset needs to have at least one
-	# of the selected tags.
+	# We currently go for an "AND" approach: an asset needs to have all the
+	# selected tags.
 	if not tag_search.empty():
 		var assets_not_matching := []
 		
 		for asset in found_assets:
-			var tag_found := false
+			var tags_missing := false
+			var asset_tags: Array = asset.get_tag_ids()
 			
-			for tag in asset.get_tag_ids():
-				if tag in tag_search:
-					# Asset has at least one matching tag.
-					tag_found = true
+			for tag in tag_search:
+				if not (tag in asset_tags):
+					# Asset is missing at least one tag
+					tags_missing = true
 					break
 			
-			if not tag_found:
-				# this asset has no matching tags.
+			if tags_missing:
 				assets_not_matching.append(asset)
 		
 		# Now remove all assets from the list that did not match.

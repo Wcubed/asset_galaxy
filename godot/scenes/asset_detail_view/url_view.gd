@@ -11,9 +11,9 @@ func _ready():
 
 
 func display_asset_node(node: Node):
-	_cancel_editing()
 	_current_asset_node = node
-	_edit.text = node.source_url
+	
+	_cancel_editing()
 
 
 func _on_EditButton_pressed():
@@ -27,6 +27,7 @@ func _start_editing():
 	_edit_button.text = "Cancel"
 	
 	_edit.editable = true
+	_edit.focus_mode = Control.FOCUS_ALL
 	_edit.mouse_default_cursor_shape = Control.CURSOR_IBEAM
 	
 	# For convenience, we drop the user into the edit field.
@@ -40,8 +41,12 @@ func _cancel_editing():
 	
 	_edit_button.text = "Edit"
 	_edit.editable = false
+	_edit.focus_mode = Control.FOCUS_NONE
 	
-	_edit.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	if _edit.text != "":
+		_edit.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	else:
+		_edit.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
 
 func _on_UrlEdit_text_entered(new_url: String):
@@ -60,7 +65,7 @@ func _on_EditButton_gui_input(event):
 func _on_UrlEdit_gui_input(event):
 	# When the user clicks on the link edit, when not actually editing the link
 	# we try to open the appropriate program.
-	if _edit.editable == false:
+	if _edit.editable == false and _edit.text != "":
 		if event is InputEventMouseButton:
 			if event.pressed == true and event.button_index == BUTTON_LEFT:
 				var result := OS.shell_open(_current_asset_node.source_url)
