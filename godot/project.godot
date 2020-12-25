@@ -17,6 +17,7 @@ _global_script_class_icons={
 
 config/name="AssetGalaxy"
 run/main_scene="res://scenes/main.tscn"
+run/low_processor_mode=true
 config/icon="res://icon.png"
 
 [display]
